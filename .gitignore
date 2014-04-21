@@ -1,0 +1,7 @@
+*.jpg
+*.png
+exportNote.txt
+preferences.txt
+bin/
+data/
+.settings/
