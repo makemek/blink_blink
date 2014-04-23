@@ -8,56 +8,10 @@ import ddf.minim.analysis.FFT;
 public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 
 	private int AMOUNT;
-	private FFT eq;
-//	private float[] average;
-	//public float avg;
 	
-//	private PShape[] box;
-//	private Rectangle[] boxes;
-		
 	public SpectrumBox(final int AMOUNT) {
 		this.AMOUNT = AMOUNT;
-//		average = new float[AMOUNT];
-		
-//		box = new PShape[AMOUNT];
-//		boxes = new Rectangle[AMOUNT];
 	}
-	
-/*//	private void averageBand()
-//	{
-//		final float SCALE = 7f;
-//				
-//		final int IGNORE_BAND = 250; // ignore last of bands due to too low values.
-//		final int UPPER_BOUND = eq.specSize() - IGNORE_BAND;
-//		final int LOWER_BOUND = 0;
-//		
-//		final int BAND_LIMIT = UPPER_BOUND/AMOUNT;
-//		
-//		float total = 0;
-//		for(int band = LOWER_BOUND, n = 0; band <= UPPER_BOUND; ++band)
-//		{
-//			float bandVal = eq.getBand(band)*SCALE;
-//			//System.out.println("BAND: " + band + " " + bandVal);
-//			total += bandVal;
-//			
-//			if(band % BAND_LIMIT == 0 && band != LOWER_BOUND)
-//			{
-//				//bandMean.add(total/BAND_LIMIT);
-//				average[n] = total/BAND_LIMIT;
-//				
-//				n++;
-//				total = 0;
-//			}
-//		}
-//		//System.out.println();
-//	}*/
-	
-//	public float[] getAverage()
-//	{
-//		return average;
-//	}
-	
-	// TODO add method 'addArduino' in this class
 	
 	public void draw(PApplet applet, float posX, float posY, float width, float height)
 	{	
@@ -65,20 +19,11 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 		final int GAP = 25;
 		int step = 0;
 				
-//		if(eq != null) {
-//			//avg = eq.calcAvg(4000, 10000);
-//			avg = eq.calcAvg(8500, 22000)*3.5f;
-//		}
-		
 		if(eq != null && song.isPlaying())
 			eq.forward(song.mix);
 		
 		for(int n = 0; n < AMOUNT; ++n)
 		{
-//			if(eq != null)
-//				average[n] = eq.getAvg(n + 1)*SCALE;
-	
-//			System.out.println(average[n]);
 			float grayVal = 0;
 			final int IGNORE_LOWER = 1;
 			
@@ -94,41 +39,16 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 			
 			step += applet.width/AMOUNT;
 		}
-		
-//		System.out.println();
-		
+				
 	}
 
-	
-	private void shapeInit(PApplet applet, float posX, float posY, float width, float height) {
-		
-//		final int GAP = 10;
-//		float step = 0;
-//		for(int n = 0; n < box.length; ++n)
-//		{
-//			box[n] = applet.createShape(PShape.RECT, posX + step, posY, width/AMOUNT - GAP, height);
-//			box[n].setStroke(applet.color(255));
-//			step += (float)applet.width/AMOUNT;
-//		}
-		
-
-	}
-	
-	//public void setAmount(final int AMOUNT) {this.AMOUNT = AMOUNT;}
-	
 	@Override
 	public void update(AudioPlayer song) {
 		System.out.println("Updating SpectrumBox");
-//		FFT_forwarder.getInstance().removeForwarder(eq);
 		eq = new FFT(song.bufferSize(), song.sampleRate());
 		eq.linAverages(AMOUNT + 6);
-		//eq.linAverages(AMOUNT + 4);
-//		eq.logAverages(22, 12);
-		//System.out.println(eq.avgSize());
 		this.song = song;
 		
-		
-//		FFT_forwarder.getInstance().addForwarder(eq, song);
 	}
 
 }
@@ -162,6 +82,5 @@ class Rectangle {
 		applet.popMatrix();
 		
 		applet.rectMode(applet.CORNER);
-		//applet.ellipse(posX, posY, 2, 2);
 	}
 }

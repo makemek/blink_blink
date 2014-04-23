@@ -16,20 +16,14 @@ public class Spectrum implements PWidget, SongListener {
 	protected ColorVariator variator = new ColorVariator();
 	private Color _color = Color.WHITE;
 		
-	private float[] boostMul;
-	
+	private float[] boostMul = new float[64];
 	
 	public void draw(PApplet applet, float posX, float posY, float width, float height)
 	{
 		if(eq == null) return;
 		
 //		applet.line(posX, posY, posX + width, posY);
-		
-		final int IGNORE_LOWER = 0, IGNORE_UPPER = 5;
-		
-		final int OFFSET = 10;
-		float step = width/(eq.avgSize() - IGNORE_UPPER - IGNORE_LOWER);
-		
+				
 		if(song.isPlaying()) {
 			eq.forward(song.mix);
 			_color = variator.variate();
@@ -41,7 +35,53 @@ public class Spectrum implements PWidget, SongListener {
 		applet.stroke(_color.getRGB());
 		applet.strokeWeight(9);
 		
-		/* logarithm equalizer */
+		equalizeLog(applet, posY, width, height, 0, 5);
+		
+		//equalizeLinear(applet, posX, posY, width, height);
+	}
+
+
+
+	private void equalizeLinear(PApplet applet, float posX, float posY, float width, float height) 
+	{
+		float step = width/eq.avgSize();
+		final int SCALE = 7;
+		
+		for(int band = 0; band < eq.specSize(); ++band)
+		{
+			float bandHeight = eq.getBand(band)*SCALE;
+			
+			if(bandHeight > height)
+				bandHeight = applet.norm(bandHeight, 0, 5000)*height;
+			
+			applet.fill(255);
+			
+			//final float placeX = posX + step, placeY = applet.height - posY;
+			final float placeX = posX + step, placeY = posY + height;
+			
+			applet.stroke(255);
+			applet.strokeWeight(1);
+			//applet.line(placeX, placeY, placeX, placeY - bandHeight);
+			applet.line(placeX, placeY, placeX, placeY - bandHeight);
+			
+			step += width/eq.specSize();
+			
+			applet.stroke(0,128,128);
+			if(band % (eq.specSize()/12) == 0 && band != 0)
+				applet.line(placeX, placeY, placeX, placeY - height);
+			
+//			if(band == eq.specSize() - 250)
+//				applet.line(placeX, placeY, placeX, 200);
+			
+		}
+	}
+
+	private void equalizeLog(PApplet applet, float posY, float width, float height,
+			final int IGNORE_LOWER, final int IGNORE_UPPER) 
+	{
+		final int OFFSET = 10;
+		float step = width/(eq.avgSize() - IGNORE_UPPER - IGNORE_LOWER);
+		
 		for(int band = IGNORE_LOWER; band < eq.avgSize() - IGNORE_UPPER; ++band)
 		{
 			float bandHeight = eq.getAvg(band) * boostMul[band];
@@ -63,39 +103,8 @@ public class Spectrum implements PWidget, SongListener {
 			//step += width/eq.specSize();
 						
 		}
-		
-		
-		
-//		/* linear equalizer */
-//		for(int band = 0; band < eq.specSize(); ++band)
-//		{
-//			float bandHeight = eq.getBand(band)*SCALE;
-//			
-//			if(bandHeight > height)
-//				bandHeight = applet.norm(bandHeight, 0, 5000)*height;
-//			
-//			applet.fill(255);
-//			
-//			//final float placeX = posX + step, placeY = applet.height - posY;
-//			final float placeX = posX + step, placeY = posY + height;
-//			
-//			applet.stroke(255);
-//			applet.strokeWeight(1);
-//			//applet.line(placeX, placeY, placeX, placeY - bandHeight);
-//			applet.line(placeX, placeY, placeX, placeY - bandHeight);
-//			
-//			step += width/eq.specSize();
-//			
-//			applet.stroke(0,128,128);
-//			if(band % (eq.specSize()/12) == 0 && band != 0)
-//				applet.line(placeX, placeY, placeX, placeY - height);
-//			
-////			if(band == eq.specSize() - 250)
-////				applet.line(placeX, placeY, placeX, 200);
-//			
-//		}
 	}
-	
+		
 	private float polyBoost(int idx) {
 		final float FIRST_MUL = .7f, LAST_MUL = 16;
 		return (float) ((LAST_MUL - FIRST_MUL)/Math.pow(eq.avgSize(), 2)*Math.pow(idx, 2) + FIRST_MUL);
@@ -116,14 +125,10 @@ public class Spectrum implements PWidget, SongListener {
 		
 		
 //		FFT_forwarder.getInstance().addForwarder(eq, song);
-		
-		
-		if(boostMul == null) {
-			boostMul = new float[64];
-			for(int n = 0; n < boostMul.length; ++n)
-				boostMul[n] = polyBoost(n);
-		}
-		
+
+		for(int n = 0; n < boostMul.length; ++n)
+			boostMul[n] = polyBoost(n);
+
 	}
 }
 
