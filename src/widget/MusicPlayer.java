@@ -111,26 +111,26 @@ public class MusicPlayer implements PWidget, Publisher<SongListener> {
 	private void layOutButton(final PApplet applet) {
 		final float YPOS = 80, RADIUS = 20;
 		
-		playPauseBt = new CircleButton(applet, 30f, YPOS, RADIUS);
+		playPauseBt = new CircleButton(30f, YPOS, RADIUS);
 		playPauseBt.setColor(Color.ORANGE);
 		playPauseBt.setSymbol(new PlaySymbol());
 
-		stopBt = new CircleButton(applet, 90f, YPOS, RADIUS);
+		stopBt = new CircleButton(90f, YPOS, RADIUS);
 		stopBt.setColor(Color.YELLOW);
 		stopBt.setSymbol(new StopSymbol());
 		
-		Button controllerBt = new CircleButton(applet, 150f, YPOS, RADIUS);
+		Button controllerBt = new CircleButton(150f, YPOS, RADIUS);
 		setupBoardController(applet, controllerBt);
 				
-		Button muteBt = new CircleButton(applet, 210f, YPOS, RADIUS);
+		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
 		muteBt.use(false);
 		muteSwitch = getMuteSwitch(muteBt);
 
-		Button loopBt = new CircleButton(applet, 270f, YPOS, RADIUS);
+		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
 		loopBt.use(false);
 		loopSwitch = getLoopSwitch(loopBt);
 		
-		RectButton bt = new RectButton(applet, 330, YPOS - 25, 100, 50);
+		RectButton bt = new RectButton(330, YPOS - 25, 100, 50);
 		setupBrowseBt(applet, bt);
 
 		buttons.add(playPauseBt);

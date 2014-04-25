@@ -11,9 +11,9 @@ public class CircleButton extends Button {
 	protected float radius;
 	
 			
-	public CircleButton(PApplet applet, float posX, float posY, float radius)
+	public CircleButton(float posX, float posY, float radius)
 	{
-		super(applet);
+		super();
 		this.applet = applet;
 
 		this.posX = posX;
@@ -23,9 +23,9 @@ public class CircleButton extends Button {
 		
 	}
 
-	public CircleButton(PApplet applet, float radius)
+	public CircleButton(float radius)
 	{
-		super(applet);
+		super();
 		this.applet = applet;
 		this.radius = radius;
 	}

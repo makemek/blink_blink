@@ -9,9 +9,9 @@ public class RectButton extends Button {
 	private float width, height;
 	
 	
-	public RectButton(PApplet applet, float posX, float posY, float width, float height)
+	public RectButton(float posX, float posY, float width, float height)
 	{
-		super(applet);
+		super();
 		this.applet = applet;
 		// to center point
 		this.posX = posX + width/2;
@@ -23,9 +23,9 @@ public class RectButton extends Button {
 	public float getWidth() {return width;}
 	public float getHeight() {return height;}
 	
-	public RectButton(PApplet applet, float width, float height)
+	public RectButton(float width, float height)
 	{
-		super(applet);
+		super();
 		this.applet = applet;
 		this.width = width;
 		this.height = height;

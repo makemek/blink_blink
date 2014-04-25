@@ -11,12 +11,13 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 import widget.Publisher;
+import applet.BlinkBlink;
 import button.symbol.Symbol;
 
 public abstract class Button extends MouseAdapter 
 		implements  Publisher<ButtonEvent>, Drawable {
 	
-	protected PApplet applet;
+	protected PApplet applet = BlinkBlink.getInstance();
 	protected float posX = 0, posY = 0;
 	protected Symbol logo = null;
 	protected Color _color = Color.WHITE;
@@ -37,8 +38,8 @@ public abstract class Button extends MouseAdapter
 	
 	public abstract boolean mouseHover();
 	
-	public Button(PApplet applet) {
-		applet.addMouseListener(this);
+	public Button() {
+		BlinkBlink.getInstance().addMouseListener(this);
 	}
 	
 	public void met() {
