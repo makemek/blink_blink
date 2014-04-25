@@ -22,8 +22,18 @@ public class BlinkBlink extends PApplet {
 	private MusicPlayer mPlayer;
 	private WaveForm waveform;
 
+	private static BlinkBlink instance = null;
+	
+	public static BlinkBlink getInstance()
+	{
+		if(instance == null)
+			instance = new BlinkBlink();
+		return instance;
+	}
+			
 	public void setup() {
-
+		instance = this;
+		
 		size(800, 600, P3D);
 
 		mPlayer = new MusicPlayer(this);
@@ -51,10 +61,10 @@ public class BlinkBlink extends PApplet {
 		this.noStroke();
 		this.rect(0, 0, width, SPEC_HEIGHT - 170);
 
-		waveform.draw(this, 0, 145, width, 30);
-		mPlayer.draw(this, 10, 10, 50, 50);
-		spectrum.draw(this, 10, 200, width, SPEC_HEIGHT);
-		analyzer.draw(this, 8, 200 + SPEC_HEIGHT + 15, width, ANAL_HEIGHT);
+		waveform.draw(instance, 0, 145, width, 30);
+		mPlayer.draw(instance, 10, 10, 50, 50);
+		spectrum.draw(instance, 10, 200, width, SPEC_HEIGHT);
+		analyzer.draw(instance, 8, 200 + SPEC_HEIGHT + 15, width, ANAL_HEIGHT);
 
 		// blur region
 		this.fill(0, 80);
