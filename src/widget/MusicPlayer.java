@@ -4,6 +4,8 @@ import helper.Drawable;
 import helper.Switchable;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -22,7 +24,7 @@ import button.symbol.Symbol;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
-public class MusicPlayer implements PWidget, Publisher<SongListener> {
+public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	private AudioPlayer song;
 	
 	private Button playPauseBt;
@@ -41,9 +43,13 @@ public class MusicPlayer implements PWidget, Publisher<SongListener> {
 	
 	private ArrayList<SongListener> observers = new ArrayList<SongListener>();
 	
-	public MusicPlayer(PApplet applet) {
+	// TODO remove PApplet from TextBox's constructor
+	
+	public MusicPlayer(Point pos, Dimension dim) {
+		super(pos, dim);
+		
 		browser = new AudioBrowser(new Minim(applet));
-		layOutButton(applet);
+		layOutButton();
 		this.register(controller);
 		
 		songController = new SongController(playPauseBt, stopBt, loopSwitch, muteSwitch);
@@ -60,11 +66,10 @@ public class MusicPlayer implements PWidget, Publisher<SongListener> {
 	}
 
 	@Override
-	public void draw(PApplet applet, float posX, float posY, float width,
-			float height) {
+	public void draw() {
 
 		applet.pushMatrix();
-		applet.translate(posX, posY);
+		applet.translate(pos.x, pos.y);
 		applet.popMatrix();
 		
 		for(Drawable elem : buttons)
@@ -108,7 +113,7 @@ public class MusicPlayer implements PWidget, Publisher<SongListener> {
 		System.out.println(song.length());					
 	}
 	
-	private void layOutButton(final PApplet applet) {
+	private void layOutButton() {
 		final float YPOS = 80, RADIUS = 20;
 		
 		playPauseBt = new CircleButton(30f, YPOS, RADIUS);

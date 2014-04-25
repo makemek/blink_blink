@@ -1,15 +1,18 @@
 package widget.equalizer;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 
 import helper.ColorVariator;
 import helper.FFT_forwarder;
 import processing.core.PApplet;
+import processing.core.PShape;
 import widget.PWidget;
 import ddf.minim.AudioPlayer;
 import ddf.minim.analysis.FFT;
 
-public class Spectrum implements PWidget, SongListener {
+public class Spectrum extends PWidget implements SongListener {
 	protected FFT eq;
 	protected AudioPlayer song;
 	
@@ -18,15 +21,16 @@ public class Spectrum implements PWidget, SongListener {
 		
 	protected float[] boostMul;
 	
-	public Spectrum()
+	public Spectrum(Point position, Dimension dim)
 	{
+		super(position, dim);
 		final int BAND = 64;
 		boostMul = new float[BAND];
 		for(int n = 0; n < boostMul.length; ++n)
 			boostMul[n] = polyBoost(n, .7f, 16, BAND);
 	}
 	
-	public void draw(PApplet applet, float posX, float posY, float width, float height)
+	public void draw()
 	{
 		if(eq == null) return;
 		
@@ -43,7 +47,7 @@ public class Spectrum implements PWidget, SongListener {
 		applet.stroke(_color.getRGB());
 		applet.strokeWeight(9);
 		
-		equalizeLog(applet, posY, width, height, 0, 5);
+		equalizeLog(applet, pos.y, dim.width, dim.height, 0, 5);
 		
 		//equalizeLinear(applet, posX, posY, width, height);
 	}

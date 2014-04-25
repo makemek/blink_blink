@@ -1,15 +1,18 @@
 package widget.equalizer;
 
+import java.awt.Dimension;
+import java.awt.Point;
+
 import processing.core.PApplet;
-import widget.PWidget;
 import ddf.minim.AudioPlayer;
 import ddf.minim.analysis.FFT;
 
-public class SpectrumBox extends Spectrum implements PWidget, SongListener {
+public class SpectrumBox extends Spectrum implements SongListener {
 
 	private int AMOUNT;
 	
-	public SpectrumBox(final int AMOUNT) {
+	public SpectrumBox(final int AMOUNT, Point pos, Dimension dim) {
+		super(pos, dim);
 		this.AMOUNT = AMOUNT;
 		boostMul = new float[AMOUNT];
 		for(int i = 0; i < boostMul.length; ++i)
@@ -20,7 +23,7 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 		
 	}
 	
-	public void draw(PApplet applet, float posX, float posY, float width, float height)
+	public void draw()
 	{	
 		final int GAP = 25;
 		final int IGNORE_LOWER = 1;
@@ -42,7 +45,7 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 			Rectangle.fill(applet, grayVal*boostMul[n]*4);
 			Rectangle.setScale(.7f + (grayVal/300 * boostMul[n]));
 			applet.strokeWeight(1 + grayVal/20 * boostMul[n]);
-			Rectangle.draw(applet, posX + step, posY, width/AMOUNT - GAP, height);
+			Rectangle.draw(applet, pos.x + step, pos.y, dim.width/AMOUNT - GAP, dim.height);
 
 			
 			step += applet.width/AMOUNT;

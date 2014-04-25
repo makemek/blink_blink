@@ -8,6 +8,8 @@
 
 package applet;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseListener;
 
 import processing.core.PApplet;
@@ -36,11 +38,11 @@ public class BlinkBlink extends PApplet {
 		
 		size(800, 600, P3D);
 
-		mPlayer = new MusicPlayer(this);
-
-		spectrum = new Spectrum();
-		analyzer = new SpectrumBox(8);
-		waveform = new WaveForm();
+		final int SPEC_HEIGHT = 300, ANAL_HEIGHT = height >> 3;
+		mPlayer = new MusicPlayer(new Point(10, 10), new Dimension(50, 50));
+		spectrum = new Spectrum(new Point(10, 200), new Dimension(width, SPEC_HEIGHT));
+		analyzer = new SpectrumBox(8, new Point(8, 200 + SPEC_HEIGHT + 15), new Dimension(width, ANAL_HEIGHT));
+		waveform = new WaveForm(new Point(0, 145), new Dimension(width, 30));
 
 		mPlayer.register(spectrum);
 		mPlayer.register(analyzer);
@@ -54,29 +56,26 @@ public class BlinkBlink extends PApplet {
 	}
 
 	public void draw() {
-		final int SPEC_HEIGHT = 300, ANAL_HEIGHT = height / 8;
-
 		// no blur region
 		this.fill(0);
 		this.noStroke();
-		this.rect(0, 0, width, SPEC_HEIGHT - 170);
+		this.rect(0, 0, width, (float) (spectrum.dim.getHeight() - 170));
 
-		waveform.draw(instance, 0, 145, width, 30);
-		mPlayer.draw(instance, 10, 10, 50, 50);
-		spectrum.draw(instance, 10, 200, width, SPEC_HEIGHT);
-		analyzer.draw(instance, 8, 200 + SPEC_HEIGHT + 15, width, ANAL_HEIGHT);
+		waveform.draw();
+		mPlayer.draw();
+		spectrum.draw();
+		analyzer.draw();
 
 		// blur region
 		this.fill(0, 80);
 		this.noStroke();
-		this.rect(0, SPEC_HEIGHT - 170, width, height);
+		this.rect(0, (float) (spectrum.dim.getHeight()) - 170, width, height);
 		
 	}
 		
 	public void stop() {
 		System.out.println("EXIT");
 		mPlayer.dispose();
-		
 	}
 	
 	public void mouseReleased() {
