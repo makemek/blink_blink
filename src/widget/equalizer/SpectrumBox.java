@@ -15,8 +15,9 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 	
 	public void draw(PApplet applet, float posX, float posY, float width, float height)
 	{	
-		final int SCALE = 7;
+		final int SCALE = 3;
 		final int GAP = 25;
+		final int IGNORE_LOWER = 1;
 		int step = 0;
 				
 		if(eq != null && song.isPlaying())
@@ -25,20 +26,22 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 		for(int n = 0; n < AMOUNT; ++n)
 		{
 			float grayVal = 0;
-			final int IGNORE_LOWER = 1;
 			
 			if(eq != null)
-				grayVal = eq.getAvg(n + IGNORE_LOWER)*SCALE*3;
+				grayVal = eq.getAvg(n+IGNORE_LOWER);
 			
-			float normGrayVal = applet.norm(grayVal, 0, 100);
-			Rectangle.fill(applet, grayVal);
-			Rectangle.setScale(1 + normGrayVal/12);
-			applet.strokeWeight(1 + normGrayVal*2);
+			//System.out.println(grayVal);
+			
+			//float normGrayVal = applet.norm(grayVal, 0, 100);
+			Rectangle.fill(applet, grayVal*SCALE);
+			Rectangle.setScale(.7f + grayVal/300);
+			applet.strokeWeight(1 + grayVal/20);
 			Rectangle.draw(applet, posX + step, posY, width/AMOUNT - GAP, height);
 
 			
 			step += applet.width/AMOUNT;
 		}
+		//System.out.println();
 				
 	}
 
@@ -46,7 +49,9 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 	public void update(AudioPlayer song) {
 		System.out.println("Updating SpectrumBox");
 		eq = new FFT(song.bufferSize(), song.sampleRate());
-		eq.linAverages(AMOUNT + 6);
+		//eq.logAverages(128, 2); // result in 8 bands
+		eq.logAverages(32, 1); 
+		System.out.println(eq.avgSize());
 		this.song = song;
 		
 	}
