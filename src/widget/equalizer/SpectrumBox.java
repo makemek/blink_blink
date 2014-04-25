@@ -11,11 +11,17 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 	
 	public SpectrumBox(final int AMOUNT) {
 		this.AMOUNT = AMOUNT;
+		boostMul = new float[AMOUNT];
+		for(int i = 0; i < boostMul.length; ++i)
+		{
+			boostMul[i] = polyBoost(i, .5f, 16, AMOUNT);
+			System.out.println(boostMul[i]);
+		}
+		
 	}
 	
 	public void draw(PApplet applet, float posX, float posY, float width, float height)
 	{	
-		final int SCALE = 3;
 		final int GAP = 25;
 		final int IGNORE_LOWER = 1;
 		int step = 0;
@@ -33,9 +39,9 @@ public class SpectrumBox extends Spectrum implements PWidget, SongListener {
 			//System.out.println(grayVal);
 			
 			//float normGrayVal = applet.norm(grayVal, 0, 100);
-			Rectangle.fill(applet, grayVal*SCALE);
-			Rectangle.setScale(.7f + grayVal/300);
-			applet.strokeWeight(1 + grayVal/20);
+			Rectangle.fill(applet, grayVal*boostMul[n]*4);
+			Rectangle.setScale(.7f + (grayVal/300 * boostMul[n]));
+			applet.strokeWeight(1 + grayVal/20 * boostMul[n]);
 			Rectangle.draw(applet, posX + step, posY, width/AMOUNT - GAP, height);
 
 			

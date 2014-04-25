@@ -16,7 +16,15 @@ public class Spectrum implements PWidget, SongListener {
 	protected ColorVariator variator = new ColorVariator();
 	private Color _color = Color.WHITE;
 		
-	private float[] boostMul = new float[64];
+	protected float[] boostMul;
+	
+	public Spectrum()
+	{
+		final int BAND = 64;
+		boostMul = new float[BAND];
+		for(int n = 0; n < boostMul.length; ++n)
+			boostMul[n] = polyBoost(n, .7f, 16, BAND);
+	}
 	
 	public void draw(PApplet applet, float posX, float posY, float width, float height)
 	{
@@ -105,30 +113,18 @@ public class Spectrum implements PWidget, SongListener {
 		}
 	}
 		
-	private float polyBoost(int idx) {
-		final float FIRST_MUL = .7f, LAST_MUL = 16;
-		return (float) ((LAST_MUL - FIRST_MUL)/Math.pow(eq.avgSize(), 2)*Math.pow(idx, 2) + FIRST_MUL);
+	protected float polyBoost(int idx, float mul_start, float mul_end, int avgSize) {
+		return (float) ((mul_end - mul_start)/Math.pow(avgSize, 2)*Math.pow(idx, 2) + mul_start);
 	}
 	
 	@Override
 	public void update(AudioPlayer song) {
 		System.out.println("Updating Spectrum");
-		
-//		FFT_forwarder.getInstance().removeForwarder(eq);
-		
+
 		eq = new FFT(song.bufferSize(), song.sampleRate());
-		//eq.logAverages(42, 10);
 		eq.logAverages(128, 8);
-//		eq.logAverages((int)song.sampleRate() / (1 << 6), 1);
 		System.out.println(eq.avgSize());
 		this.song = song;
-		
-		
-//		FFT_forwarder.getInstance().addForwarder(eq, song);
-
-		for(int n = 0; n < boostMul.length; ++n)
-			boostMul[n] = polyBoost(n);
-
 	}
 }
 
