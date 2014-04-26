@@ -10,6 +10,7 @@ package applet;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import processing.core.PApplet;
@@ -78,10 +79,22 @@ public class BlinkBlink extends PApplet {
 		mPlayer.dispose();
 	}
 	
-	public void mouseReleased() {
+	public void mouseMoved(MouseEvent e)
+	{
+		super.mouseMoved(e);
 		MouseListener[] listeners = this.getMouseListeners();	
 		for(MouseListener lst : listeners) {
-			lst.mouseReleased(null);
+			lst.mouseEntered(e);
+		}
+		
+	}
+	
+
+	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(e);
+		MouseListener[] listeners = this.getMouseListeners();	
+		for(MouseListener lst : listeners) {
+			lst.mouseReleased(e);
 		}	
 	}
 }

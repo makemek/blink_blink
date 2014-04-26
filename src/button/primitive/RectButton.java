@@ -76,11 +76,11 @@ public class RectButton extends Button {
 	}
 	
 	@Override
-	public boolean mouseHover() {
+	public boolean isHover(int x, int y) {
 		final float CORN_X = posX - width/2, CORN_Y = posY - height/2;
 		
-		return ( (applet.mouseX > CORN_X) && (applet.mouseX < CORN_X + width) &&
-				 (applet.mouseY > CORN_Y) && (applet.mouseY < CORN_Y + height));
+		return ( (x > CORN_X) && (x < CORN_X + width) &&
+				 (y > CORN_Y) && (y < CORN_Y + height));
 	}
 
 }

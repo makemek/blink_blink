@@ -23,6 +23,8 @@ public abstract class Button extends MouseAdapter
 	protected Color _color = Color.WHITE;
 	
 	private boolean use = true;
+	protected enum STATE {IDLE, HOVER};
+	protected STATE currentState = STATE.IDLE; 
 	
 	private ArrayList<ButtonEvent> observers = new ArrayList<ButtonEvent>();
 	
@@ -36,16 +38,12 @@ public abstract class Button extends MouseAdapter
 	public void setSymbol(Symbol sym) {logo = sym;}
 	protected abstract void drawSymbol();
 	
-	public abstract boolean mouseHover();
+	public abstract boolean isHover(int x, int y);
 	
 	public Button() {
 		BlinkBlink.getInstance().addMouseListener(this);
 	}
-	
-	public void met() {
-		System.out.println("asdf");
-	}
-	
+		
 	public void use(boolean isEnable) {use = isEnable;}
 	public boolean isUse() {return use;}
 	
@@ -57,14 +55,16 @@ public abstract class Button extends MouseAdapter
 		if(!use)
 			return;
 		
-		if(applet.mousePressed && mouseHover())
-			onPressed();
-				
-		else if(mouseHover())
-			onHover();
-		
-		else
+		switch(currentState)
+		{
+		case HOVER:
+			onHover(); 
+			break;
+
+		default:
 			drawShape();
+		}
+		
 	}
 			
 	protected void scaleUp(final float SCALE)
@@ -98,9 +98,16 @@ public abstract class Button extends MouseAdapter
 		this._color = _color;
 	}
 	
+	public void mouseEntered(MouseEvent e)
+	{
+		if(this.isHover(e.getX(), e.getY()))
+			currentState = STATE.HOVER;
+		else
+			currentState = STATE.IDLE;
+	}
 	
 	public void mouseReleased(MouseEvent e) {
-		if(!this.mouseHover())
+		if(!this.isHover(e.getX(), e.getY()))
 			return;
 		
 		for(ButtonEvent evt : observers)

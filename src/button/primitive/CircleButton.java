@@ -63,8 +63,8 @@ public class CircleButton extends Button {
 	
 	
 	
-	public boolean mouseHover() {
-		return applet.dist(applet.mouseX, applet.mouseY, posX, posY) < radius;
+	public boolean isHover(int x, int y) {
+		return applet.dist(x, y, posX, posY) < radius;
 	}
 	
 	public float getRadius() {return radius;}
