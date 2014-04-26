@@ -42,7 +42,7 @@ public class BlinkBlink extends PApplet {
 		final int SPEC_HEIGHT = 300, ANAL_HEIGHT = height >> 3;
 		mPlayer = new MusicPlayer(new Point(10, 10), new Dimension(50, 50));
 		spectrum = new Spectrum(new Point(10, 200), new Dimension(width, SPEC_HEIGHT));
-		analyzer = new SpectrumBox(8, new Point(8, 200 + SPEC_HEIGHT + 15), new Dimension(width, ANAL_HEIGHT));
+		analyzer = new SpectrumBox(new Point(8, 200 + SPEC_HEIGHT + 15), new Dimension(width, ANAL_HEIGHT));
 		waveform = new WaveForm(new Point(0, 145), new Dimension(width, 30));
 
 		mPlayer.register(spectrum);

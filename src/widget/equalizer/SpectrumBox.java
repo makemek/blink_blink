@@ -13,51 +13,55 @@ import ddf.minim.analysis.FFT;
 
 public class SpectrumBox extends Spectrum implements SongListener {
 
-	private int AMOUNT;
+	private int amount = 0;
 	private ColorVariator variator = new ColorVariator();
+	private boolean busy = false;
 	
-	public SpectrumBox(final int AMOUNT, Point pos, Dimension dim) {
+	private final int IGNORE_LOWER = 1;
+	private final int IGNORE_UPPER = 1;
+	
+	public SpectrumBox(Point pos, Dimension dim) {
 		super(pos, dim);
-		this.AMOUNT = AMOUNT;
-		boostMul = new float[AMOUNT];
-		for(int i = 0; i < boostMul.length; ++i)
-			boostMul[i] = polyBoost(i, .5f, 16, AMOUNT);
-		
 		variator.setStep(.25f);
-		initShape();
 	}
 	
-	private void initShape()
+	private PShape createShape()
 	{
 		final int GAP = 25;
 		
-		for(int n = 0, step = 0; n < AMOUNT; ++n)
-		{
-			float width = dim.width/AMOUNT - GAP;
-			float height = dim.height;
-			PShape rect = applet.createShape(PApplet.ELLIPSE, -width/2, -height/2, width, height);
-			rect.width = width;
-			rect.height = height;
-			
-			rect.disableStyle();
-			
-			shapes.add(rect);
-			step += applet.width / AMOUNT;
-		}
+		float width = dim.width/amount - GAP;
+		float height = dim.height;
+		PShape rect = applet.createShape(PApplet.ELLIPSE, -width/2, -height/2, width, height);
+		rect.width = width;
+		rect.height = height;
+		
+		rect.disableStyle();
+		
+		return rect;
+		
 	}
 	
 	public void draw()
 	{	
-		final int IGNORE_LOWER = 1;
 		int step = 0;
 		
 		if(eq == null)
 			return;
 		
-		if(song.isPlaying())
+		if(song != null && song.isPlaying())
 		{
 			eq.forward(song.mix);
 			variator.variate();
+		}
+		
+		while(busy) {
+			synchronized(this){
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		int n = 0;
@@ -69,16 +73,16 @@ public class SpectrumBox extends Spectrum implements SongListener {
 			applet.fill(variator.getColor().getRGB(), grayVal);
 			applet.stroke(variator.getColor().brighter().getRGB());
 			
-			applet.strokeWeight(3 + grayVal/20);
+			applet.strokeWeight(2 + grayVal/30);
 			
 			// scale
 			applet.pushMatrix();
 			applet.translate(pos.x + step + s.width/2, pos.y + s.height/2);
-			applet.scale(.5f + (grayVal/300));
+			applet.scale(.5f + (grayVal/400));
 			applet.shape(s);
 			applet.popMatrix();
 
-			step += applet.width / AMOUNT;
+			step += applet.width / amount;
 			++n;
 		}
 	}
@@ -89,7 +93,31 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		eq = new FFT(song.bufferSize(), song.sampleRate());
 		//eq.logAverages(128, 2); // result in 8 bands
 		eq.logAverages(32, 1); 
-		System.out.println(eq.avgSize());
+				
+		if(eq.avgSize() != amount)
+		{
+			synchronized(this) {
+				busy = true;
+				amount = eq.avgSize();
+				int size = amount - IGNORE_LOWER - IGNORE_UPPER;
+				
+				boostMul = new float[size];
+				shapes = new PShape[size];
+				
+				for(int n = 0; n < size; ++n)
+				{
+					boostMul[n] = polyBoost(n + IGNORE_LOWER, .3f, 16, size);
+					shapes[n] = createShape();
+				}
+				
+				amount = size;
+				busy = false;
+				
+				this.notify();
+			}
+		}
+		
+		System.out.println(amount);
 		this.song = song;
 		
 	}

@@ -15,7 +15,7 @@ public abstract class PWidget implements Drawable
 	public Point pos;
 	public Dimension dim;
 	
-	protected ArrayList<PShape> shapes = new ArrayList<>();
+	protected PShape[] shapes;
 	
 	public PWidget(Point position, Dimension dim)
 	{

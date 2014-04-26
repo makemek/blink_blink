@@ -32,7 +32,7 @@ public class Spectrum extends PWidget implements SongListener {
 	
 	public void draw()
 	{
-		if(eq == null) return;
+		if(eq == null || song == null) return;
 		
 //		applet.line(posX, posY, posX + width, posY);
 				
