@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="lib/base/serial/jssc.jar" sourcepath="D:/Program/processing-2.1/modes/java/libraries/serial/src">
+	<classpathentry kind="lib" path="lib/base/serial/jssc.jar" sourcepath="D:/Program/processing-2.1.2/modes/java/libraries/serial/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="BlinkBlink/lib/base/serial"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/serial/serial.jar" sourcepath="D:/Program/processing-2.1/modes/java/libraries/serial/src">
+	<classpathentry kind="lib" path="lib/base/serial/serial.jar" sourcepath="D:/Program/processing-2.1.2/modes/java/libraries/serial/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="BlinkBlink/lib/base/serial"/>
 		</attributes>
@@ -62,7 +62,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/user/Minim-2.2.0/minim.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/Apipol/Documents/Processing/libraries/Minim-2.2.0/javadoc/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="BlinkBlink/lib/user/Minim-2.2.0"/>
 		</attributes>
 	</classpathentry>
@@ -81,7 +80,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="BlinkBlink/lib/user/Minim-2.2.0"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core/core.jar"/>
 	<classpathentry kind="lib" path="lib/base/core/gluegen-rt-natives-linux-amd64.jar"/>
 	<classpathentry kind="lib" path="lib/base/core/gluegen-rt-natives-linux-armv6hf.jar"/>
 	<classpathentry kind="lib" path="lib/base/core/gluegen-rt-natives-linux-i586.jar"/>
@@ -96,6 +94,7 @@
 	<classpathentry kind="lib" path="lib/base/core/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="lib/base/core/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="lib/base/core/jogl-all.jar"/>
+	<classpathentry kind="lib" path="lib/base/core/core.jar"/>
 	<classpathentry kind="lib" path="lib/base/serial/RXTXcomm.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
