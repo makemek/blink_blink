@@ -55,7 +55,10 @@ public class SpectrumBox extends Spectrum implements SongListener {
 			return;
 		
 		if(song.isPlaying())
+		{
 			eq.forward(song.mix);
+			variator.variate();
+		}
 		
 		int n = 0;
 		for(PShape s : shapes)
@@ -63,16 +66,15 @@ public class SpectrumBox extends Spectrum implements SongListener {
 			float grayVal = 0;
 			grayVal = eq.getAvg(n + IGNORE_LOWER) * boostMul[n];
 			
-			Color color = variator.variate();
-			applet.fill(color.getRGB(), grayVal);
-			applet.stroke(color.brighter().getRGB());
+			applet.fill(variator.getColor().getRGB(), grayVal);
+			applet.stroke(variator.getColor().brighter().getRGB());
 			
 			applet.strokeWeight(3 + grayVal/20);
 			
 			// scale
 			applet.pushMatrix();
 			applet.translate(pos.x + step + s.width/2, pos.y + s.height/2);
-			applet.scale(.5f + (grayVal/250));
+			applet.scale(.5f + (grayVal/300));
 			applet.shape(s);
 			applet.popMatrix();
 

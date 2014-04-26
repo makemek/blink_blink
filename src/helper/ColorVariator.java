@@ -28,6 +28,11 @@ public class ColorVariator {
 		incG = accumulate(incG, destColor.getGreen());
 		incB = accumulate(incB, destColor.getBlue());
 		
+		return getColor();
+	}
+	
+	public Color getColor()
+	{
 		return new Color(incR.intValue(), incG.intValue(), incB.intValue());
 	}
 	
