@@ -1,17 +1,21 @@
 package widget;
 
+import helper.Drawable;
+
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
 
-import helper.Drawable;
+import processing.core.PShape;
 import applet.BlinkBlink;
-import processing.core.PApplet;
 
 public abstract class PWidget implements Drawable
 {
 	protected BlinkBlink applet = BlinkBlink.getInstance();
 	public Point pos;
 	public Dimension dim;
+	
+	protected ArrayList<PShape> shapes = new ArrayList<>();
 	
 	public PWidget(Point position, Dimension dim)
 	{

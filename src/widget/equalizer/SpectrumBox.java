@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import processing.core.PApplet;
+import processing.core.PShape;
 import ddf.minim.AudioPlayer;
 import ddf.minim.analysis.FFT;
 
@@ -16,42 +17,57 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		this.AMOUNT = AMOUNT;
 		boostMul = new float[AMOUNT];
 		for(int i = 0; i < boostMul.length; ++i)
-		{
 			boostMul[i] = polyBoost(i, .5f, 16, AMOUNT);
-			System.out.println(boostMul[i]);
-		}
 		
+		initShape();
+	}
+	
+	private void initShape()
+	{
+		final int GAP = 25;
+		
+		for(int n = 0, step = 0; n < AMOUNT; ++n)
+		{
+			float width = dim.width/AMOUNT - GAP;
+			float height = dim.height;
+			PShape rect = applet.createShape(PApplet.RECT, -width/2, -height/2, width, height);
+			rect.width = width;
+			rect.height = height;
+
+			shapes.add(rect);
+			step += applet.width / AMOUNT;
+		}
 	}
 	
 	public void draw()
 	{	
-		final int GAP = 25;
 		final int IGNORE_LOWER = 1;
 		int step = 0;
-				
+		
 		if(eq != null && song.isPlaying())
 			eq.forward(song.mix);
 		
-		for(int n = 0; n < AMOUNT; ++n)
+		int n = 0;
+		for(PShape s : shapes)
 		{
 			float grayVal = 0;
+			if (eq != null)
+				grayVal = eq.getAvg(n + IGNORE_LOWER);
 			
-			if(eq != null)
-				grayVal = eq.getAvg(n+IGNORE_LOWER);
+			s.setFill(applet.color(grayVal*boostMul[n]*4));
+			s.setStrokeWeight(1 + grayVal/20 * boostMul[n]);
+			s.setStroke(255);
 			
-			//System.out.println(grayVal);
-			
-			//float normGrayVal = applet.norm(grayVal, 0, 100);
-			Rectangle.fill(applet, grayVal*boostMul[n]*4);
-			Rectangle.setScale(.7f + (grayVal/300 * boostMul[n]));
-			applet.strokeWeight(1 + grayVal/20 * boostMul[n]);
-			Rectangle.draw(applet, pos.x + step, pos.y, dim.width/AMOUNT - GAP, dim.height);
+			// scale
+			applet.pushMatrix();
+			applet.translate(pos.x + step + s.width/2, pos.y + s.height/2);
+			applet.scale(.7f + (grayVal/300 * boostMul[n]));
+			applet.shape(s);
+			applet.popMatrix();
 
-			
-			step += applet.width/AMOUNT;
+			step += applet.width / AMOUNT;
+			++n;
 		}
-		//System.out.println();
-				
 	}
 
 	@Override
@@ -65,36 +81,4 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		
 	}
 
-}
-
-class Rectangle {
-	
-	static float scale = 1;
-	
-	public static void fill(PApplet applet, float grayVal)
-	{
-		applet.fill(grayVal);
-	}
-	
-	public static void setScale(float s)
-	{
-		scale = s;
-	}
-	
-	public static void draw(PApplet applet, float posX, float posY,
-			float width, float height) {
-		applet.stroke(255);
-		posX = posX + width/2;
-		posY = posY + height/2;
-		applet.rectMode(applet.CENTER);
-		
-		applet.pushMatrix();
-		applet.translate(posX, posY);
-		applet.scale(scale);
-		applet.translate(-posX, -posY);
-		applet.rect(posX, posY , width, height);
-		applet.popMatrix();
-		
-		applet.rectMode(applet.CORNER);
-	}
 }
