@@ -1,5 +1,8 @@
 package widget.equalizer;
 
+import helper.ColorVariator;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 
@@ -11,6 +14,7 @@ import ddf.minim.analysis.FFT;
 public class SpectrumBox extends Spectrum implements SongListener {
 
 	private int AMOUNT;
+	private ColorVariator variator = new ColorVariator();
 	
 	public SpectrumBox(final int AMOUNT, Point pos, Dimension dim) {
 		super(pos, dim);
@@ -19,6 +23,7 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		for(int i = 0; i < boostMul.length; ++i)
 			boostMul[i] = polyBoost(i, .5f, 16, AMOUNT);
 		
+		variator.setStep(.25f);
 		initShape();
 	}
 	
@@ -30,10 +35,12 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		{
 			float width = dim.width/AMOUNT - GAP;
 			float height = dim.height;
-			PShape rect = applet.createShape(PApplet.RECT, -width/2, -height/2, width, height);
+			PShape rect = applet.createShape(PApplet.ELLIPSE, -width/2, -height/2, width, height);
 			rect.width = width;
 			rect.height = height;
-
+			
+			rect.disableStyle();
+			
 			shapes.add(rect);
 			step += applet.width / AMOUNT;
 		}
@@ -44,24 +51,28 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		final int IGNORE_LOWER = 1;
 		int step = 0;
 		
-		if(eq != null && song.isPlaying())
+		if(eq == null)
+			return;
+		
+		if(song.isPlaying())
 			eq.forward(song.mix);
 		
 		int n = 0;
 		for(PShape s : shapes)
 		{
 			float grayVal = 0;
-			if (eq != null)
-				grayVal = eq.getAvg(n + IGNORE_LOWER);
+			grayVal = eq.getAvg(n + IGNORE_LOWER) * boostMul[n];
 			
-			s.setFill(applet.color(grayVal*boostMul[n]*4));
-			s.setStrokeWeight(1 + grayVal/20 * boostMul[n]);
-			s.setStroke(255);
+			Color color = variator.variate();
+			applet.fill(color.getRGB(), grayVal);
+			applet.stroke(color.brighter().getRGB());
+			
+			applet.strokeWeight(3 + grayVal/20);
 			
 			// scale
 			applet.pushMatrix();
 			applet.translate(pos.x + step + s.width/2, pos.y + s.height/2);
-			applet.scale(.7f + (grayVal/300 * boostMul[n]));
+			applet.scale(.5f + (grayVal/250));
 			applet.shape(s);
 			applet.popMatrix();
 
