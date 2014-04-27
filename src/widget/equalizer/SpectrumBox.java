@@ -6,6 +6,8 @@ import helper.Pair;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import processing.core.PApplet;
 import processing.core.PShape;
@@ -16,9 +18,8 @@ public class SpectrumBox extends Spectrum implements SongListener {
 
 	private int amount = 0;
 	private ColorVariator variator = new ColorVariator();
-	private boolean busy = false;
 	
-	private ArrayList<Pair<PShape, Float>> shapeBoost = new ArrayList<>();
+	private ConcurrentLinkedQueue<Pair<PShape, Float>> shapeBoost = new ConcurrentLinkedQueue<>();
 	
 	private final int IGNORE_LOWER = 1;
 	private final int IGNORE_UPPER = 1;
@@ -57,15 +58,7 @@ public class SpectrumBox extends Spectrum implements SongListener {
 			variator.variate();
 		}
 		
-		while(busy) {
-			synchronized(this){
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+
 		
 		int n = 0;
 		for(Pair<PShape, Float> p : shapeBoost)
@@ -101,25 +94,19 @@ public class SpectrumBox extends Spectrum implements SongListener {
 				
 		if(eq.avgSize() != amount)
 		{
-			synchronized(this) {
-				busy = true;
-				amount = eq.avgSize();
-				int size = amount - IGNORE_LOWER - IGNORE_UPPER;
-								
-				shapeBoost.clear();
-				
-				for(int n = 0; n < size; ++n)
-				{
-					float boost = polyBoost(n + IGNORE_LOWER, .3f, 16, size);
-					PShape s = createShape();
-					shapeBoost.add(new Pair<PShape, Float>(s, boost));
-				}
-				
-				amount = size;
-				busy = false;
-				
-				this.notify();
+			amount = eq.avgSize();
+			int size = amount - IGNORE_LOWER - IGNORE_UPPER;
+							
+			shapeBoost.clear();
+			
+			for(int n = 0; n < size; ++n)
+			{
+				float boost = polyBoost(n + IGNORE_LOWER, .3f, 16, size);
+				PShape s = createShape();
+				shapeBoost.add(new Pair<PShape, Float>(s, boost));
 			}
+			
+			amount = size;
 		}
 		
 		System.out.println(amount);
