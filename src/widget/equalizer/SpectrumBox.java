@@ -1,10 +1,11 @@
 package widget.equalizer;
 
 import helper.ColorVariator;
+import helper.Pair;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PShape;
@@ -16,6 +17,8 @@ public class SpectrumBox extends Spectrum implements SongListener {
 	private int amount = 0;
 	private ColorVariator variator = new ColorVariator();
 	private boolean busy = false;
+	
+	private ArrayList<Pair<PShape, Float>> shapeBoost = new ArrayList<>();
 	
 	private final int IGNORE_LOWER = 1;
 	private final int IGNORE_UPPER = 1;
@@ -65,10 +68,12 @@ public class SpectrumBox extends Spectrum implements SongListener {
 		}
 		
 		int n = 0;
-		for(PShape s : shapes)
+		for(Pair<PShape, Float> p : shapeBoost)
 		{
+			PShape s = p.getLeft();
+			
 			float grayVal = 0;
-			grayVal = eq.getAvg(n + IGNORE_LOWER) * boostMul[n];
+			grayVal = eq.getAvg(n + IGNORE_LOWER) * p.getRight();
 			
 			applet.fill(variator.getColor().getRGB(), grayVal);
 			applet.stroke(variator.getColor().brighter().getRGB());
@@ -100,14 +105,14 @@ public class SpectrumBox extends Spectrum implements SongListener {
 				busy = true;
 				amount = eq.avgSize();
 				int size = amount - IGNORE_LOWER - IGNORE_UPPER;
-				
-				boostMul = new float[size];
-				shapes = new PShape[size];
+								
+				shapeBoost.clear();
 				
 				for(int n = 0; n < size; ++n)
 				{
-					boostMul[n] = polyBoost(n + IGNORE_LOWER, .3f, 16, size);
-					shapes[n] = createShape();
+					float boost = polyBoost(n + IGNORE_LOWER, .3f, 16, size);
+					PShape s = createShape();
+					shapeBoost.add(new Pair<PShape, Float>(s, boost));
 				}
 				
 				amount = size;
