@@ -31,7 +31,7 @@ import ddf.minim.Minim;
 public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	private AudioPlayer song;
 	
-	private Button playPauseBt;
+	private Switch playPauseBt;
 	private Button stopBt;
 	private Switch muteSwitch;
 	private Switch loopSwitch;
@@ -91,7 +91,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 		
 		//System.out.println(song.length() - song.position());
 		
-		if (!song.isPlaying() /* && playPauseBt.getSymbol() instanceof PauseSymbol*/) {
+		if (!song.isPlaying() && playPauseBt.isEnable() /* && playPauseBt.getSymbol() instanceof PauseSymbol*/) {
 			System.out.println("END");
 			songController.stop();
 			
@@ -122,9 +122,10 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 		PShape crossSym = SymbolResource.crossSymbol();
 		PShape loopSym = SymbolResource.loopSymbol();
 		
-		playPauseBt = new CircleButton(30f, YPOS, RADIUS);
-		playPauseBt.setColor(Color.ORANGE);
-		playPauseBt.setSymbol(SymbolResource.playSymbol());
+		Button playBt = new CircleButton(30f, YPOS, RADIUS);
+		playBt.setColor(Color.ORANGE);
+		playBt.use(false);
+		playPauseBt = new Switch(playBt, SymbolResource.pauseSymbol(), SymbolResource.playSymbol());
 
 		stopBt = new CircleButton(90f, YPOS, RADIUS);
 		stopBt.setColor(Color.ORANGE);
@@ -135,7 +136,8 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 				
 		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
 		muteBt.use(false);
-		muteSwitch = ButtonFactory.createSwitch(muteBt, new PShape[] {muteSym, crossSym}, new PShape[] {muteSym});
+		//muteSwitch = ButtonFactory.createSwitch(muteBt, new PShape[] {muteSym, crossSym}, new PShape[] {muteSym});
+		muteSwitch = new Switch(muteBt, crossSym, SymbolResource.playSymbol());
 
 		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
 		loopBt.use(false);

@@ -11,34 +11,27 @@ import ddf.minim.AudioPlayer;
 class SongController implements SongListener
 {
 	private AudioPlayer song;
-	private Button playPauseBt;
+	private Switch playBt;
 	private Button stopBt;
 	private Switch loopSwitch;
 	private Switch muteSwitch;
 	
 	private boolean looping = false;
 	
-	public SongController(final Button playPauseBt, final Button stopBt, final Switch loopSwitch, final Switch muteSwitch) {
-		playPauseBt.register(new ButtonEvent() {
-
+	public SongController(final Switch playPauseBt, final Button stopBt, final Switch loopSwitch, final Switch muteSwitch) {
+		playPauseBt.addEventListener(new Switchable() {
+			
 			@Override
-			public void onClicked() {
-				if(song == null) return;
-				
-				if (isButtonPlay()) {
-					play();
-				}
-				
-
-				else if (isButtonPause()) {
-					pause();
-				}
-
-//				else if (!song.isPlaying() && isButtonPause)
-//					stop();
+			public void enable() {
+				play();
 				
 			}
-
+			
+			@Override
+			public void disable() {
+				pause();
+				
+			}
 		});
 		
 		stopBt.register(new ButtonEvent() {
@@ -75,49 +68,39 @@ class SongController implements SongListener
 		});
 		
 		this.stopBt = stopBt;
-		this.playPauseBt = playPauseBt;
+		this.playBt = playPauseBt;
 		this.muteSwitch = muteSwitch;
 		this.loopSwitch = loopSwitch;
 	}
 		
 	public boolean isLooping() {return looping;}
 	
-	private boolean isButtonPlay() {
-		//return playPauseBt.getSymbol() instanceof PlaySymbol;
-		return false;
-	}
-	
-	private boolean isButtonPause() {
-		//return playPauseBt.getSymbol() instanceof PauseSymbol;
-		return false;
-	}
-	
 	public void play() {
 		if(song == null) return;
 		System.out.println("Play");
+		System.out.println(playBt.isEnable());
 		
 //		synchronized(controller) {
 //			if(controller.isEnable())
 //				controller.notifyAll();
 //		}
 		
+		playBt.on();
 		song.play();
-
-		playPauseBt.setSymbol(SymbolResource.pauseSymbol());
 	}
 	
 	public void pause() {
 		if(song == null) return;
 		System.out.println("Pause");
-		song.pause();
-		playPauseBt.setSymbol(SymbolResource.playSymbol());
-		
+		playBt.off();
+		song.pause();	
 	}
 	
 	public void stop() {
 		if(song == null) return;
 		System.out.println("STOP");
-		playPauseBt.setSymbol(SymbolResource.playSymbol());
+		
+		playBt.off();
 		song.rewind();
 		song.pause();
 	}
@@ -130,5 +113,6 @@ class SongController implements SongListener
 		this.song = song;
 		loopSwitch.getButton().use(true);
 		muteSwitch.getButton().use(true);
+		playBt.getButton().use(true);
 	}
 }

@@ -106,7 +106,7 @@ public abstract class Button extends MouseAdapter
 	}
 	
 	public void mouseReleased(MouseEvent e) {
-		if(!this.isHover(e.getX(), e.getY()))
+		if(!this.isHover(e.getX(), e.getY()) || !use)
 			return;
 		
 		for(ButtonEvent evt : observers)

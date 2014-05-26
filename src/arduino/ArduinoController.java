@@ -25,7 +25,7 @@ public class ArduinoController implements Switchable {
 			public void onClicked() {
 				if(maker.arduino == null) {
 					maker.showUI();
-					switchBt.disable();
+					switchBt.off();
 				}
 
 //				else
@@ -79,7 +79,7 @@ public class ArduinoController implements Switchable {
 			return;
 		
 		System.out.println("Disposing");
-		switchBt.disable();
+		switchBt.off();
 		
 		maker.arduino.dispose();
 		maker.arduino = null;

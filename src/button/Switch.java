@@ -13,31 +13,26 @@ public class Switch implements Drawable
 	protected final Button button;
 	
 	private PShape onSym = null, offSym = null;
-	
-	private ButtonEvent swEvent = new ButtonEvent() {
-
-		@Override
-		public void onClicked() {
-			if(!on)
-				enable();
-			else
-				disable();
-		}		
-	};
+		
+	public void toggle()
+	{
+		if(on)
+			off();
+		else
+			on();
+	}
 	
 	public Switch(final Button bt)
 	{
 		this.button = bt;
-		disable();
-		button.register(swEvent);
+		off();
 	}
 	
 	public Switch(final Button bt, PShape on, PShape off) {
 		this.button = bt;
 		this.onSym = on;
 		this.offSym = off;
-		disable();
-		button.register(swEvent);
+		off();
 	}
 	
 	public Button getButton() {return button;}
@@ -50,26 +45,9 @@ public class Switch implements Drawable
 		this.offSym = symbol;
 	}
 	
-	
 	public boolean isEnable() {return on;}
 	
-	public void enable() 
-	{
-		on = true;
-		if(onSym != null)
-			button.setSymbol(onSym);
-		
-	}
-	
-	public void disable() 
-	{
-		on = false;
-		if(offSym != null)
-			button.setSymbol(offSym);
-	}
-
 	public void addEventListener(final Switchable event) {
-		button.unregister(swEvent);
 		
 		button.register(new ButtonEvent() {
 
@@ -77,16 +55,36 @@ public class Switch implements Drawable
 			public void onClicked() 
 			{
 				if(!on)
+				{
 					event.enable();
+					on();
+				}
 
 				else
+				{
 					event.disable();
+					off();
+				}
+				
 			}
 		});
 		
-		button.register(swEvent); // on/off do last
 	}
-
+	
+	public void on()
+	{
+		on = true;
+		if(onSym != null)
+			button.setSymbol(onSym);
+	}
+	
+	public void off()
+	{
+		on = false;
+		if(offSym != null)
+			button.setSymbol(offSym);
+	}
+	
 	@Override
 	public void draw() {
 		button.draw();
