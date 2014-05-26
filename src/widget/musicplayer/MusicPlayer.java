@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import processing.core.PApplet;
 import textbox.TextBox;
@@ -16,6 +17,7 @@ import widget.Publisher;
 import widget.equalizer.SongListener;
 import arduino.ArduinoSongController;
 import button.AudioBrowser;
+import button.ButtonFactory;
 import button.Switch;
 import button.primitive.Button;
 import button.primitive.ButtonEvent;
@@ -117,27 +119,31 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	private void layOutButton() {
 		final float YPOS = 80, RADIUS = 20;
 		
+		Symbol playSym = new PlaySymbol(), pauseSym = new PauseSymbol(), stopSym = new StopSymbol();
+		Symbol muteSym = new MuteSymbol(), crossSym = new CrossSymbol();
+		Symbol loopSym = new LoopSymbol();
+		
 		playPauseBt = new CircleButton(30f, YPOS, RADIUS);
 		playPauseBt.setColor(Color.ORANGE);
-		playPauseBt.setSymbol(new PlaySymbol());
+		playPauseBt.setSymbol(playSym);
 
 		stopBt = new CircleButton(90f, YPOS, RADIUS);
 		stopBt.setColor(Color.YELLOW);
-		stopBt.setSymbol(new StopSymbol());
+		stopBt.setSymbol(stopSym);
 		
 		Button controllerBt = new CircleButton(150f, YPOS, RADIUS);
 		setupBoardController(applet, controllerBt);
 				
 		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
 		muteBt.use(false);
-		muteSwitch = getMuteSwitch(muteBt);
+		muteSwitch = ButtonFactory.createSwitch(muteBt, new Symbol[] {muteSym, crossSym}, new Symbol[] {muteSym});
 
 		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
 		loopBt.use(false);
-		loopSwitch = getLoopSwitch(loopBt);
+		loopSwitch = ButtonFactory.createSwitch(loopBt, new Symbol[] {loopSym}, new Symbol[] {loopSym, crossSym});
 		
 		RectButton bt = new RectButton(330, YPOS - 25, 100, 50);
-		setupBrowseBt(applet, bt);
+		setupBrowseBt(bt);
 
 		buttons.add(playPauseBt);
 		buttons.add(stopBt);
@@ -145,57 +151,6 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 		buttons.add(controllerBt);
 		buttons.add(muteBt);
 		buttons.add(loopBt);
-	}
-
-	private Switch getLoopSwitch(Button loopBt) {
-		final Switch sw = new Switch(loopBt, new Symbol() {
-			
-			private LoopSymbol symLoop = new LoopSymbol();
-			
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				symLoop.draw(applet, posX, posY);
-			}
-
-		}, new Symbol() {
-			
-			private LoopSymbol symLoop = new LoopSymbol();
-			private CrossSymbol symCross = new CrossSymbol();
-			
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				symLoop.draw(applet, posX, posY);
-				symCross.draw(applet, posX, posY);
-			}
-		});
-	
-		return sw;
-	}
-
-	private Switch getMuteSwitch(Button muteBt) {
-		
-		Switch sw = new Switch(muteBt, new Symbol() {
-			
-			private MuteSymbol symMute = new MuteSymbol();
-			private CrossSymbol symCross = new CrossSymbol();
-			
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				symMute.draw(applet, posX, posY);
-				symCross.draw(applet, posX, posY);
-			}
-			
-		}, new Symbol() {
-			
-			private MuteSymbol symMute = new MuteSymbol();
-			
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				symMute.draw(applet, posX, posY);
-			}
-		});
-	
-		return sw;
 	}
 
 	private void setupBoardController(final PApplet applet, Button controllerBt) {
@@ -224,7 +179,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 		controller = new ArduinoSongController(applet, controllerSwitch);
 	}
 
-	private void setupBrowseBt(final PApplet applet, final RectButton bt) {
+	private void setupBrowseBt(final RectButton bt) {
 		bt.setSymbol(new Symbol() {
 			private TextBox msg = new TextBox(applet, bt.getWidth(), bt.getHeight());
 			@Override
