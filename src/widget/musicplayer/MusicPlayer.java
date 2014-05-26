@@ -1,4 +1,4 @@
-package widget;
+package widget.musicplayer;
 
 import helper.Drawable;
 import helper.Switchable;
@@ -12,6 +12,8 @@ import java.util.LinkedList;
 
 import processing.core.PApplet;
 import textbox.TextBox;
+import widget.PWidget;
+import widget.Publisher;
 import widget.equalizer.SongListener;
 import arduino.ArduinoSongController;
 import button.AudioBrowser;

@@ -14,10 +14,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import processing.core.PApplet;
-import widget.MusicPlayer;
 import widget.WaveForm;
 import widget.equalizer.Spectrum;
 import widget.equalizer.SpectrumBox;
+import widget.musicplayer.MusicPlayer;
 
 public class BlinkBlink extends PApplet {
 	private SpectrumBox analyzer;
