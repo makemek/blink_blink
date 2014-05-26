@@ -46,8 +46,6 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	
 	private ArrayList<SongListener> observers = new ArrayList<SongListener>();
 	
-	// TODO remove PApplet from TextBox's constructor
-	
 	public MusicPlayer(Point pos, Dimension dim) {
 		super(pos, dim);
 		
@@ -58,10 +56,10 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 		songController = new SongController(playPauseBt, stopBt, loopSwitch, muteSwitch);
 		this.register(songController);
 		
-		timeStamp = new TextBox(applet, 100, 50);
+		timeStamp = new TextBox(100, 50);
 		timeStamp.setStrokeColor(Color.ORANGE);
 		
-		track = new TextBox(applet, applet.width + 5, 35);
+		track = new TextBox(applet.width + 5, 35);
 		track.setTextColor(Color.WHITE);
 		track.setStrokeColor(Color.LIGHT_GRAY);
 		track.setTextSize(25);
@@ -181,7 +179,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 
 	private void setupBrowseBt(final RectButton bt) {
 		bt.setSymbol(new Symbol() {
-			private TextBox msg = new TextBox(applet, bt.getWidth(), bt.getHeight());
+			private TextBox msg = new TextBox(bt.getWidth(), bt.getHeight());
 			@Override
 			public void draw(PApplet applet, float posX, float posY) {
 				msg.text = "BROWSE";

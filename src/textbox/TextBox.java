@@ -2,19 +2,20 @@ package textbox;
 
 import java.awt.Color;
 
+import applet.BlinkBlink;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PShape;
 
 public class TextBox {
-	private PApplet applet;
+	private PApplet applet = BlinkBlink.getInstance();
 	private PShape box = new PShape();
 	private int textSize = 25;
 	private Color textColor = Color.WHITE;
 	public String text = "";
 
-	public TextBox(PApplet applet, float boxWidth, float boxHeight) {
+	public TextBox(float boxWidth, float boxHeight) {
 		this.applet = applet;
 		this.text = text;
 		
