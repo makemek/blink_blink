@@ -8,9 +8,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Stack;
 
 import processing.core.PApplet;
+import processing.core.PShape;
 import textbox.TextBox;
 import widget.PWidget;
 import widget.Publisher;
@@ -24,6 +24,7 @@ import button.primitive.ButtonEvent;
 import button.primitive.CircleButton;
 import button.primitive.RectButton;
 import button.symbol.Symbol;
+import button.symbol.SymbolResource;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
@@ -90,7 +91,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 		
 		//System.out.println(song.length() - song.position());
 		
-		if (!song.isPlaying() && playPauseBt.getSymbol() instanceof PauseSymbol) {
+		if (!song.isPlaying() /* && playPauseBt.getSymbol() instanceof PauseSymbol*/) {
 			System.out.println("END");
 			songController.stop();
 			
@@ -117,28 +118,28 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	private void layOutButton() {
 		final float YPOS = 80, RADIUS = 20;
 		
-		Symbol playSym = new PlaySymbol(), pauseSym = new PauseSymbol(), stopSym = new StopSymbol();
-		Symbol muteSym = new MuteSymbol(), crossSym = new CrossSymbol();
-		Symbol loopSym = new LoopSymbol();
+		PShape muteSym = SymbolResource.muteSymbol();
+		PShape crossSym = SymbolResource.crossSymbol();
+		PShape loopSym = SymbolResource.loopSymbol();
 		
 		playPauseBt = new CircleButton(30f, YPOS, RADIUS);
 		playPauseBt.setColor(Color.ORANGE);
-		playPauseBt.setSymbol(playSym);
+		playPauseBt.setSymbol(SymbolResource.playSymbol());
 
 		stopBt = new CircleButton(90f, YPOS, RADIUS);
-		stopBt.setColor(Color.YELLOW);
-		stopBt.setSymbol(stopSym);
+		stopBt.setColor(Color.ORANGE);
+		stopBt.setSymbol(SymbolResource.primitive(PApplet.RECT));
 		
 		Button controllerBt = new CircleButton(150f, YPOS, RADIUS);
 		setupBoardController(applet, controllerBt);
 				
 		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
 		muteBt.use(false);
-		muteSwitch = ButtonFactory.createSwitch(muteBt, new Symbol[] {muteSym, crossSym}, new Symbol[] {muteSym});
+		muteSwitch = ButtonFactory.createSwitch(muteBt, new PShape[] {muteSym, crossSym}, new PShape[] {muteSym});
 
 		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
 		loopBt.use(false);
-		loopSwitch = ButtonFactory.createSwitch(loopBt, new Symbol[] {loopSym}, new Symbol[] {loopSym, crossSym});
+		loopSwitch = ButtonFactory.createSwitch(loopBt, new PShape[] {loopSym}, new PShape[] {loopSym, crossSym});
 		
 		RectButton bt = new RectButton(330, YPOS - 25, 100, 50);
 		setupBrowseBt(bt);
@@ -152,44 +153,34 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	}
 
 	private void setupBoardController(final PApplet applet, Button controllerBt) {
-		Switch controllerSwitch = new Switch(controllerBt, new Symbol() {
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				applet.strokeWeight(0);
-				applet.fill(Color.GREEN.getRGB());
-				applet.ellipseMode(applet.CENTER);
-				applet.ellipse(posX + width/2, posY + height/2, width, height);
-			}
-			
-		}, new Symbol() {
-
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				applet.strokeWeight(0);
-				applet.fill(Color.RED.getRGB());
-				applet.ellipseMode(applet.CENTER);
-				applet.ellipse(posX + width/2, posY + height/2, width, height);	
-				
-			}
-			
-		});
-
-		controller = new ArduinoSongController(applet, controllerSwitch);
+		
+		PShape on = SymbolResource.primitive(PApplet.ELLIPSE);
+		PShape off = SymbolResource.primitive(PApplet.ELLIPSE);
+		on.setStroke(false);
+		off.setStroke(false);
+		off.setFill(Color.RED.getRGB());
+		on.setFill(Color.GREEN.getRGB());
+		
+		Switch sw = new Switch(controllerBt, on, off);
+		controller = new ArduinoSongController(applet, sw);
 	}
 
 	private void setupBrowseBt(final RectButton bt) {
-		bt.setSymbol(new Symbol() {
-			private TextBox msg = new TextBox(bt.getWidth(), bt.getHeight());
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				msg.text = "BROWSE";
-				msg.setTextSize(20);
-//				msg.showBox(false);
-				msg.setTextColor(Color.BLACK);
-				msg.draw(posX, posY);
-			}
-			
-		});
+//		bt.setSymbol(new Symbol() {
+//			private TextBox msg = new TextBox(bt.getWidth(), bt.getHeight());
+//			@Override
+//			public void draw(PApplet applet, float posX, float posY) {
+//				msg.text = "BROWSE";
+//				msg.setTextSize(20);
+////				msg.showBox(false);
+//				msg.setTextColor(Color.BLACK);
+//				msg.draw(posX, posY);
+//			}
+//			
+//		});
+		
+		bt.setSymbol(SymbolResource.crossSymbol());
+		
 		bt.setColor(Color.ORANGE);
 		
 		bt.register(new ButtonEvent() {
@@ -240,88 +231,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 			observer.update(song);
 	}
 
-
-}
-
-
-class PauseSymbol implements Symbol {
-	@Override
-	public void draw(PApplet applet, float posX, float posY) {
-		final float GAP = width / 4;
-		final float RECT_WIDTH = (width - GAP) / 2;
-		final int COLOR = Color.white.getRGB();
-
-		applet.stroke(0);
-		applet.strokeWeight(1);
-
-		applet.fill(COLOR);
-		applet.rect(posX, posY, RECT_WIDTH, height);
-		applet.rect(posX + RECT_WIDTH + GAP, posY, RECT_WIDTH, height);
-
-	}
-}
-
-class MuteSymbol implements Symbol {
-
-	public void draw(PApplet applet, float posX, float posY) {
-		applet.fill(0);
-		applet.noStroke();
-		
-		applet.beginShape();
-		applet.vertex(posX, posY + 25);
-		applet.vertex(posX + this.width, posY);
-		applet.vertex(posX + this.width, posY + this.height);
-		applet.endShape();
-		
-		applet.rect(posX, posY, 20, this.height);	
-	}
-}
-
-class CrossSymbol implements Symbol {
-	public void draw(PApplet applet, float posX, float posY) {
-		applet.stroke(0);
-		applet.strokeWeight(4);
-		applet.stroke(Color.RED.getRGB());
-		applet.line(posX, posY + this.height,  posX + this.width, posY);
-	}
-}
-
-class LoopSymbol implements Symbol {
 	
-	public void draw(PApplet applet, float posX, float posY) {
-		applet.noFill();
-		applet.stroke(0);
-		applet.strokeWeight(4);
-		
-		byte half_width = width >> 1, half_height = height >> 1;
-		
-		applet.arc(posX + half_width, posY + half_height, half_width, half_height, -PApplet.HALF_PI, PApplet.PI);
-	}
 }
 
-class PlaySymbol implements Symbol {
-	@Override
-	public void draw(PApplet applet, float posX, float posY) {
 
-		final int OFFSET_X = 5;
-		applet.fill(0);
-
-		applet.beginShape();
-		applet.vertex(OFFSET_X + posX, posY);
-		applet.vertex(OFFSET_X + posX, posY + height);
-		applet.vertex(OFFSET_X + posX + width, posY + height / 2);
-		applet.endShape(applet.CLOSE);
-	}
-}
-
-class StopSymbol implements Symbol {
-	@Override
-	public void draw(PApplet applet, float posX, float posY) {
-		applet.rectMode(applet.CORNER);
-		applet.fill(Color.RED.getRGB());
-		applet.stroke(Color.ORANGE.getRGB());
-		applet.strokeWeight(2);
-		applet.strokeCap(applet.ROUND);
-		applet.rect(posX, posY, width, height);
-	}
-}

@@ -5,6 +5,7 @@ import widget.equalizer.SongListener;
 import button.Switch;
 import button.primitive.Button;
 import button.primitive.ButtonEvent;
+import button.symbol.SymbolResource;
 import ddf.minim.AudioPlayer;
 
 class SongController implements SongListener
@@ -82,11 +83,13 @@ class SongController implements SongListener
 	public boolean isLooping() {return looping;}
 	
 	private boolean isButtonPlay() {
-		return playPauseBt.getSymbol() instanceof PlaySymbol;
+		//return playPauseBt.getSymbol() instanceof PlaySymbol;
+		return false;
 	}
 	
 	private boolean isButtonPause() {
-		return playPauseBt.getSymbol() instanceof PauseSymbol;
+		//return playPauseBt.getSymbol() instanceof PauseSymbol;
+		return false;
 	}
 	
 	public void play() {
@@ -100,21 +103,21 @@ class SongController implements SongListener
 		
 		song.play();
 
-		playPauseBt.setSymbol(new PauseSymbol());
+		playPauseBt.setSymbol(SymbolResource.pauseSymbol());
 	}
 	
 	public void pause() {
 		if(song == null) return;
 		System.out.println("Pause");
 		song.pause();
-		playPauseBt.setSymbol(new PlaySymbol());
+		playPauseBt.setSymbol(SymbolResource.playSymbol());
 		
 	}
 	
 	public void stop() {
 		if(song == null) return;
 		System.out.println("STOP");
-		playPauseBt.setSymbol(new PlaySymbol());
+		playPauseBt.setSymbol(SymbolResource.playSymbol());
 		song.rewind();
 		song.pause();
 	}

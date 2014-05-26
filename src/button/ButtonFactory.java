@@ -1,31 +1,24 @@
 package button;
 
 import processing.core.PApplet;
+import processing.core.PShape;
+import applet.BlinkBlink;
 import button.primitive.Button;
 import button.symbol.Symbol;
 
 public class ButtonFactory {
 	
-	public static Switch createSwitch(Button bt, final Symbol[] on, final Symbol[] off)
+	public static Switch createSwitch(Button bt, final PShape[] on, final PShape[] off)
 	{
-		Symbol onSym = new Symbol() {
-
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				for (Symbol s : on)
-					s.draw(applet, posX, posY);
-			}
-		};
 		
-		Symbol offSym = new Symbol() {
-
-			@Override
-			public void draw(PApplet applet, float posX, float posY) {
-				for (Symbol s : off)
-					s.draw(applet, posX, posY);
-			}
-			
-		};
+		PShape onSym = BlinkBlink.getInstance().createShape(PApplet.GROUP);
+		PShape offSym = BlinkBlink.getInstance().createShape(PApplet.GROUP);
+		
+		for (PShape p : on)
+			onSym.addChild(p);
+		
+		for (PShape p : off)
+			offSym.addChild(p);
 		
 		return new Switch(bt, onSym, offSym);
 		

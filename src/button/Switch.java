@@ -2,6 +2,7 @@ package button;
 
 import helper.Drawable;
 import helper.Switchable;
+import processing.core.PShape;
 import button.primitive.Button;
 import button.primitive.ButtonEvent;
 import button.symbol.Symbol;
@@ -11,7 +12,7 @@ public class Switch implements Drawable
 	private boolean on = false;
 	protected final Button button;
 	
-	private Symbol onSym = null, offSym = null;
+	private PShape onSym = null, offSym = null;
 	
 	private ButtonEvent swEvent = new ButtonEvent() {
 
@@ -31,7 +32,7 @@ public class Switch implements Drawable
 		button.register(swEvent);
 	}
 	
-	public Switch(final Button bt, Symbol on, Symbol off) {
+	public Switch(final Button bt, PShape on, PShape off) {
 		this.button = bt;
 		this.onSym = on;
 		this.offSym = off;
@@ -41,11 +42,11 @@ public class Switch implements Drawable
 	
 	public Button getButton() {return button;}
 	
-	public void setOnSymbol(Symbol symbol) {
+	public void setOnSymbol(PShape symbol) {
 		this.onSym = symbol;
 	}
 	
-	public void setOffSymbol(Symbol symbol) {
+	public void setOffSymbol(PShape symbol) {
 		this.offSym = symbol;
 	}
 	

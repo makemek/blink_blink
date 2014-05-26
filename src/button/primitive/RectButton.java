@@ -70,7 +70,12 @@ public class RectButton extends Button {
 		if(logo.width > width || logo.height > height)
 			;
 		else
-			logo.draw(applet, posX - width/2, posY - height/2);
+		{
+			float x = posX - width/2, y = posY - height/2;
+			applet.translate(x, y);
+			applet.shape(logo);
+			applet.translate(-x, -y);
+		}
 		
 		applet.popMatrix();
 	}

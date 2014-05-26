@@ -52,8 +52,8 @@ public class CircleButton extends Button {
 		applet.scale(radius/logo.width, radius/logo.height);
 		applet.translate(-posX, -posY);
 		
-		applet.translate(-logo.width/2f, -logo.height/2f);
-		logo.draw(applet, posX ,posY);
+		applet.translate(posX -logo.width/2f, posY -logo.height/2f);
+		applet.shape(logo);
 		
 		applet.popMatrix();
 		

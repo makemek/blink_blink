@@ -5,11 +5,10 @@ import helper.Drawable;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PShape;
 import widget.Publisher;
 import applet.BlinkBlink;
 import button.symbol.Symbol;
@@ -19,7 +18,7 @@ public abstract class Button extends MouseAdapter
 	
 	protected PApplet applet = BlinkBlink.getInstance();
 	protected float posX = 0, posY = 0;
-	protected Symbol logo = null;
+	protected PShape logo = null;
 	protected Color _color = Color.WHITE;
 	
 	private boolean use = true;
@@ -34,8 +33,8 @@ public abstract class Button extends MouseAdapter
 	public float getPositionY() {return posY;}
 	public void setPositionX(float newX) {posX = newX;}
 	public void setPositionY(float newY) {posY = newY;}
-	public Symbol getSymbol() {return logo;}
-	public void setSymbol(Symbol sym) {logo = sym;}
+	public PShape getSymbol() {return logo;}
+	public void setSymbol(PShape sym) {logo = sym;}
 	protected abstract void drawSymbol();
 	
 	public abstract boolean isHover(int x, int y);
