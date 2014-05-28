@@ -54,7 +54,9 @@ public class CircleButton extends Button {
 //		applet.translate(-posX, -posY);
 //		
 //		applet.translate(posX -logo.width/2f, posY -logo.height/2f);
-		applet.shape(logo, posX + diameter/4, posY + diameter/4, diameter/2, diameter/2);
+		float rad = diameter/2;
+		float hRad = rad/2;
+		applet.shape(logo, posX + hRad, posY + hRad, rad, rad);
 //		
 //		applet.popMatrix();
 		

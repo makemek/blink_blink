@@ -114,33 +114,33 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	}
 	
 	private void layOutButton() {
-		final float YPOS = 40, RADIUS = 40;
+		final float YPOS = 70, DIAMETER = 40;
 			
-		Button playBt = new CircleButton(30f, YPOS, RADIUS);
+		Button playBt = new CircleButton(30f, YPOS, DIAMETER);
 		playBt.setColor(Color.ORANGE);
 		playBt.use(false);
 		playPauseBt = new Switch(playBt, Symbol.pause(), Symbol.play());
 
-		stopBt = new CircleButton(90f, YPOS, RADIUS);
+		stopBt = new CircleButton(90f, YPOS, DIAMETER);
 		stopBt.setColor(Color.ORANGE);
 		stopBt.setSymbol(Symbol.primitive(PApplet.RECT));
 		
-		Button controllerBt = new CircleButton(150f, YPOS, RADIUS);
+		Button controllerBt = new CircleButton(150f, YPOS, DIAMETER);
 		setupBoardController(applet, controllerBt);
 				
-		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
+		Button muteBt = new CircleButton(210f, YPOS, DIAMETER);
 		muteBt.use(false);
 		
 		PShape muteSpeaker = Symbol.groupShape(Symbol.speaker(), Symbol.cross());
 		muteSwitch = new Switch(muteBt, muteSpeaker, Symbol.speaker());
 		
-		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
+		Button loopBt = new CircleButton(270f, YPOS, DIAMETER);
 		PShape notLoop = Symbol.groupShape(Symbol.loop(), Symbol.cross());
 		loopSwitch = new Switch(loopBt, Symbol.loop(), notLoop);
 		loopBt.use(false);
 		
 		
-		RectButton bt = new RectButton(330, YPOS - 25, 100, 50);
+		RectButton bt = new RectButton(330, YPOS - DIAMETER/4, 100, 50);
 		setupBrowseBt(bt);
 
 		buttons.add(playPauseBt);
