@@ -114,7 +114,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	}
 	
 	private void layOutButton() {
-		final float YPOS = 80, RADIUS = 20;
+		final float YPOS = 40, RADIUS = 40;
 			
 		Button playBt = new CircleButton(30f, YPOS, RADIUS);
 		playBt.setColor(Color.ORANGE);

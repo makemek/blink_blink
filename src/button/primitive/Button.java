@@ -27,7 +27,9 @@ public abstract class Button extends MouseAdapter
 	
 	private ArrayList<ButtonEvent> observers = new ArrayList<ButtonEvent>();
 	
+	protected PShape btShape;
 	protected abstract void drawShape();
+	public PShape getShape() {return btShape;}
 	
 	public float getPositionX() {return posX;}
 	public float getPositionY() {return posY;}

@@ -5,27 +5,27 @@ import java.awt.event.MouseEvent;
 
 import button.symbol.Symbol;
 import processing.core.PApplet;
+import processing.core.PShape;
 
 public class CircleButton extends Button {
 	
-	protected float radius;
+	protected float diameter;
 	
 			
-	public CircleButton(float posX, float posY, float radius)
+	public CircleButton(float posX, float posY, float diameter)
 	{
 		super();
 
 		this.posX = posX;
 		this.posY = posY;
 		
-		this.radius = radius;
-		
+		this.diameter = diameter;
+		btShape = Symbol.primitive(PApplet.ELLIPSE, diameter, diameter);
 	}
 
-	public CircleButton(float radius)
+	public CircleButton(float diameter)
 	{
-		super();
-		this.radius = radius;
+		this(0f,0f,diameter);
 	}
 	
 	protected void circle()
@@ -34,38 +34,52 @@ public class CircleButton extends Button {
 		applet.fill(_color.getRGB());
 		applet.strokeWeight(3);
 		applet.stroke(128);
-		applet.ellipse(posX, posY, radius, radius);
+		applet.ellipse(posX, posY, diameter, diameter);
 	}
 	
 	public void drawShape()
 	{
-		circle();
+//		circle();
+		applet.shape(btShape, posX, posY);
 		drawSymbol();
 	}
 	
 	protected void drawSymbol()
 	{
 		if(logo == null) return;
-		applet.pushMatrix();
-		
-		applet.translate(posX, posY);
-		applet.scale(radius/logo.width, radius/logo.height);
-		applet.translate(-posX, -posY);
-		
-		applet.translate(posX -logo.width/2f, posY -logo.height/2f);
-		applet.shape(logo);
-		
-		applet.popMatrix();
+//		applet.pushMatrix();
+//		
+//		applet.translate(posX + diameter/4, posY + diameter/4);
+//		applet.scale(diameter/logo.width/2, diameter/logo.height/2);
+//		applet.translate(-posX, -posY);
+//		
+//		applet.translate(posX -logo.width/2f, posY -logo.height/2f);
+		applet.shape(logo, posX + diameter/4, posY + diameter/4, diameter/2, diameter/2);
+//		
+//		applet.popMatrix();
 		
 	}
 	
 	
 	
 	public boolean isHover(int x, int y) {
-		return applet.dist(x, y, posX, posY) < radius;
+		
+		return ( (x > posX) && (x < posX + diameter) &&
+				 (y > posY) && (y < posY + diameter));
 	}
 	
-	public float getRadius() {return radius;}
+	public float getdiameter() {return diameter;}
+	
+	protected void scaleUp(final float SCALE)
+	{
+		float radius = diameter/2;
+		applet.pushMatrix();
+		applet.translate(posX + radius, posY + radius);
+		applet.scale(SCALE);
+		applet.translate(-posX - radius, -posY - radius);
+		drawShape();
+		applet.popMatrix();
+	}
 	
 	@Override
 	public void onHover() {
