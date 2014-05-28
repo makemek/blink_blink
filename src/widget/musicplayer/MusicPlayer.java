@@ -17,14 +17,12 @@ import widget.Publisher;
 import widget.equalizer.SongListener;
 import arduino.ArduinoSongController;
 import button.AudioBrowser;
-import button.ButtonFactory;
 import button.Switch;
 import button.primitive.Button;
 import button.primitive.ButtonEvent;
 import button.primitive.CircleButton;
 import button.primitive.RectButton;
 import button.symbol.Symbol;
-import button.symbol.SymbolResource;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
@@ -117,36 +115,30 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	
 	private void layOutButton() {
 		final float YPOS = 80, RADIUS = 20;
-		
-		PShape unmuteSym = SymbolResource.muteSymbol();
-		PShape crossSym = SymbolResource.crossSymbol();
-		PShape loopSym = SymbolResource.loopSymbol();
-		
+			
 		Button playBt = new CircleButton(30f, YPOS, RADIUS);
 		playBt.setColor(Color.ORANGE);
 		playBt.use(false);
-		playPauseBt = new Switch(playBt, SymbolResource.pauseSymbol(), SymbolResource.playSymbol());
+		playPauseBt = new Switch(playBt, Symbol.pause(), Symbol.play());
 
 		stopBt = new CircleButton(90f, YPOS, RADIUS);
 		stopBt.setColor(Color.ORANGE);
-		stopBt.setSymbol(SymbolResource.primitive(PApplet.RECT));
+		stopBt.setSymbol(Symbol.primitive(PApplet.RECT));
 		
 		Button controllerBt = new CircleButton(150f, YPOS, RADIUS);
 		setupBoardController(applet, controllerBt);
 				
 		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
 		muteBt.use(false);
-		unmuteSym.setFill(0);
-		//muteSwitch = ButtonFactory.createSwitch(muteBt, new PShape[] {muteSym, crossSym}, new PShape[] {muteSym});
 		
-		//TODO BUG symbols can't be groupped and display
+		PShape muteSpeaker = Symbol.groupShape(Symbol.speaker(), Symbol.cross());
+		muteSwitch = new Switch(muteBt, muteSpeaker, Symbol.speaker());
 		
-		muteSwitch = new Switch(muteBt, unmuteSym, unmuteSym);
-
 		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
+		PShape notLoop = Symbol.groupShape(Symbol.loop(), Symbol.cross());
+		loopSwitch = new Switch(loopBt, Symbol.loop(), notLoop);
 		loopBt.use(false);
-		//loopSwitch = ButtonFactory.createSwitch(loopBt, new PShape[] {loopSym}, new PShape[] {loopSym, crossSym});
-		loopSwitch = new Switch(loopBt, loopSym, loopSym);
+		
 		
 		RectButton bt = new RectButton(330, YPOS - 25, 100, 50);
 		setupBrowseBt(bt);
@@ -161,8 +153,8 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 
 	private void setupBoardController(final PApplet applet, Button controllerBt) {
 		
-		PShape on = SymbolResource.primitive(PApplet.ELLIPSE);
-		PShape off = SymbolResource.primitive(PApplet.ELLIPSE);
+		PShape on = Symbol.primitive(PApplet.ELLIPSE);
+		PShape off = Symbol.primitive(PApplet.ELLIPSE);
 		on.setStroke(false);
 		off.setStroke(false);
 		off.setFill(Color.RED.getRGB());
@@ -185,8 +177,6 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 //			}
 //			
 //		});
-		
-		bt.setSymbol(SymbolResource.crossSymbol());
 		
 		bt.setColor(Color.ORANGE);
 		

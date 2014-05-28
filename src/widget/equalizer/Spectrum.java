@@ -1,15 +1,15 @@
 package widget.equalizer;
 
+import helper.ColorVariator;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import button.symbol.SymbolResource;
-import helper.ColorVariator;
-import helper.FFT_forwarder;
 import processing.core.PApplet;
 import processing.core.PShape;
 import widget.PWidget;
+import button.symbol.Symbol;
 import ddf.minim.AudioPlayer;
 import ddf.minim.analysis.FFT;
 
@@ -34,7 +34,7 @@ public class Spectrum extends PWidget implements SongListener {
 		{
 			boostMul[n] = polyBoost(n, .7f, 16, BAND);
 			
-			bar[n] = SymbolResource.primitive(PApplet.LINE, 0, 1);
+			bar[n] = Symbol.primitive(PApplet.LINE, 0, 1);
 			bar[n].setStrokeWeight(8);
 			bar[n].setStroke(Color.WHITE.getRGB());
 		}

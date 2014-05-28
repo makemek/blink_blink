@@ -5,7 +5,6 @@ import widget.equalizer.SongListener;
 import button.Switch;
 import button.primitive.Button;
 import button.primitive.ButtonEvent;
-import button.symbol.SymbolResource;
 import ddf.minim.AudioPlayer;
 
 class SongController implements SongListener
