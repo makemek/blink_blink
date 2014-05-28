@@ -118,7 +118,7 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 	private void layOutButton() {
 		final float YPOS = 80, RADIUS = 20;
 		
-		PShape muteSym = SymbolResource.muteSymbol();
+		PShape unmuteSym = SymbolResource.muteSymbol();
 		PShape crossSym = SymbolResource.crossSymbol();
 		PShape loopSym = SymbolResource.loopSymbol();
 		
@@ -136,12 +136,17 @@ public class MusicPlayer extends PWidget implements Publisher<SongListener> {
 				
 		Button muteBt = new CircleButton(210f, YPOS, RADIUS);
 		muteBt.use(false);
+		unmuteSym.setFill(0);
 		//muteSwitch = ButtonFactory.createSwitch(muteBt, new PShape[] {muteSym, crossSym}, new PShape[] {muteSym});
-		muteSwitch = new Switch(muteBt, crossSym, SymbolResource.playSymbol());
+		
+		//TODO BUG symbols can't be groupped and display
+		
+		muteSwitch = new Switch(muteBt, unmuteSym, unmuteSym);
 
 		Button loopBt = new CircleButton(270f, YPOS, RADIUS);
 		loopBt.use(false);
-		loopSwitch = ButtonFactory.createSwitch(loopBt, new PShape[] {loopSym}, new PShape[] {loopSym, crossSym});
+		//loopSwitch = ButtonFactory.createSwitch(loopBt, new PShape[] {loopSym}, new PShape[] {loopSym, crossSym});
+		loopSwitch = new Switch(loopBt, loopSym, loopSym);
 		
 		RectButton bt = new RectButton(330, YPOS - 25, 100, 50);
 		setupBrowseBt(bt);

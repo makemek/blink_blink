@@ -98,8 +98,6 @@ public class SymbolResource {
 		shape.addChild(rect);
 		shape.addChild(triangle);
 		
-		//shape.fill(0);
-		
 		setDimension(shape);
 		
 		return shape;
