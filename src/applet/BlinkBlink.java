@@ -25,7 +25,7 @@ public class BlinkBlink extends PApplet {
 	private MusicPlayer mPlayer;
 	private WaveForm waveform;
 
-	private static BlinkBlink instance = null;
+	protected static BlinkBlink instance = null;
 	
 	public static BlinkBlink getInstance()
 	{
