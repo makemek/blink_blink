@@ -61,12 +61,10 @@ public class SymbolResource {
 	public static PShape loopSymbol()
 	{
 		byte halfW = WIDTH >> 1, halfH = HEIGHT >> 1;
-		PShape shape = applet.createShape(PApplet.ARC, halfW, halfH, halfW, halfH, -PApplet.HALF_PI, PApplet.PI);
-//		shape.beginShape();
-//		shape.noFill();
-//		shape.stroke(0);
-//		shape.strokeWeight(4);
-//		shape.endShape();
+//		PShape shape = applet.createShape(PApplet.ARC, halfW, halfH, halfW, halfH, -PApplet.HALF_PI, PApplet.PI);
+		PShape shape = applet.createShape(PApplet.ARC, 0, 0, WIDTH, HEIGHT, -PApplet.HALF_PI, PApplet.PI);
+		shape.setFill(false);
+		shape.setStrokeWeight(4);
 		
 		setDimension(shape);
 		
@@ -76,6 +74,8 @@ public class SymbolResource {
 	public static PShape crossSymbol()
 	{
 		PShape shape = applet.createShape(PApplet.LINE, 0, HEIGHT, WIDTH, 0);
+		shape.setStrokeWeight(4);
+		shape.setStroke(Color.red.getRGB());
 
 		setDimension(shape);
 		return shape;
@@ -90,13 +90,15 @@ public class SymbolResource {
 		triangle.vertex(0, 25);
 		triangle.vertex(WIDTH, 0);
 		triangle.vertex(WIDTH, HEIGHT);
-		triangle.noStroke();
 		triangle.endShape(PApplet.CLOSE);
+		triangle.setFill(Color.black.getRGB());
 		
 		PShape rect = applet.createShape(PApplet.RECT, 0, 0, 20, HEIGHT);
+		rect.setFill(Color.BLACK.getRGB());
 		
-		shape.addChild(rect);
 		shape.addChild(triangle);
+		shape.addChild(rect);
+		
 		
 		setDimension(shape);
 		
