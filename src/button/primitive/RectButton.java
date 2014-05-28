@@ -3,6 +3,7 @@ package button.primitive;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import button.symbol.Symbol;
 import processing.core.PApplet;
 
 public class RectButton extends Button {
@@ -13,11 +14,13 @@ public class RectButton extends Button {
 	{
 		super();
 		this.applet = applet;
-		// to center point
-		this.posX = posX + width/2;
-		this.posY = posY + height/2;
+		
+		this.posX = posX;
+		this.posY = posY;
 		this.width = width;
 		this.height = height;
+		
+		btShape = Symbol.primitive(PApplet.RECT, width, height);
 	}
 	
 	public float getWidth() {return width;}
@@ -25,10 +28,7 @@ public class RectButton extends Button {
 	
 	public RectButton(float width, float height)
 	{
-		super();
-		this.applet = applet;
-		this.width = width;
-		this.height = height;
+		this(0f, 0f, width, height);
 	}
 	
 	@Override
@@ -53,7 +53,8 @@ public class RectButton extends Button {
 	
 	@Override
 	public void drawShape() {
-		rectangle();
+		//rectangle();
+		applet.shape(btShape, posX, posY);
 		drawSymbol();
 	}
 		
@@ -80,12 +81,24 @@ public class RectButton extends Button {
 		applet.popMatrix();
 	}
 	
+	public void scaleUp(final float SCALE)
+	{
+		applet.pushMatrix();
+		
+		applet.translate(posX + width/2, posY + height/2);
+		applet.scale(SCALE);
+		applet.translate(-posX - width/2, -posY - height/2);
+		
+		drawShape();
+		
+		applet.popMatrix();
+	}
+	
 	@Override
 	public boolean isHover(int x, int y) {
-		final float CORN_X = posX - width/2, CORN_Y = posY - height/2;
 		
-		return ( (x > CORN_X) && (x < CORN_X + width) &&
-				 (y > CORN_Y) && (y < CORN_Y + height));
+		return ( (x > posX) && (x < posX + width) &&
+				 (y > posY) && (y < posY + height));
 	}
 
 }
