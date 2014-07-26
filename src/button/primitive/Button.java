@@ -102,6 +102,7 @@ public abstract class Button extends MouseAdapter
 	
 	public void setColor(Color _color) {
 		this._color = _color;
+		btShape.setFill(_color.getRGB());
 	}
 	
 	public void mouseEntered(MouseEvent e)
