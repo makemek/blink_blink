@@ -8,12 +8,15 @@
 
 package applet;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import button.symbol.Symbol;
 import processing.core.PApplet;
+import processing.core.PShape;
 import widget.WaveForm;
 import widget.equalizer.Spectrum;
 import widget.equalizer.SpectrumBox;
@@ -24,8 +27,12 @@ public class BlinkBlink extends PApplet {
 	private Spectrum spectrum;
 	private MusicPlayer mPlayer;
 	private WaveForm waveform;
+	
+	private final int BG_COLOR = Color.BLUE.getRGB();
 
 	protected static BlinkBlink instance = null;
+	
+	private PShape shape;
 	
 	public static BlinkBlink getInstance()
 	{
@@ -38,6 +45,8 @@ public class BlinkBlink extends PApplet {
 		instance = this;
 		
 		size(800, 600, P3D);
+		
+		shape = Symbol.primitive(PApplet.ELLIPSE, 10, 10);
 
 		final int SPEC_HEIGHT = 300, ANAL_HEIGHT = height >> 3;
 		mPlayer = new MusicPlayer(new Point(10, 10), new Dimension(50, 50));
@@ -51,14 +60,14 @@ public class BlinkBlink extends PApplet {
 
 		smooth();
 		this.frameRate(30);
-		background(0);
+		background(BG_COLOR);
 		
 		System.out.println("READY!");
 	}
 
 	public void draw() {
-		// no blur region
-		this.fill(0);
+//		// no blur region
+		this.fill(BG_COLOR);
 		this.noStroke();
 		this.rect(0, 0, width, (float) (spectrum.dim.getHeight() - 170));
 
@@ -67,11 +76,10 @@ public class BlinkBlink extends PApplet {
 		spectrum.draw();
 		analyzer.draw();
 
-		// blur region
-		this.fill(0, 80);
+//		// blur region
+		this.fill(BG_COLOR, 80);
 		this.noStroke();
-		this.rect(0, (float) (spectrum.dim.getHeight()) - 170, width, height);
-		
+		this.rect(0, (float) (spectrum.dim.getHeight()) - 170, width, height);		
 	}
 		
 	public void stop() {
@@ -89,7 +97,6 @@ public class BlinkBlink extends PApplet {
 		
 	}
 	
-
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased(e);
 		MouseListener[] listeners = this.getMouseListeners();	
