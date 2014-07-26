@@ -50,14 +50,7 @@ public class RectButton extends Button {
 		applet.rect(posX,  posY, width, height);
 		applet.rectMode(applet.CORNER);
 	}
-	
-	@Override
-	public void drawShape() {
-		//rectangle();
-		applet.shape(btShape, posX, posY);
-		drawSymbol();
-	}
-		
+			
 	protected void drawSymbol()
 	{
 		if(logo == null) return;
@@ -89,7 +82,7 @@ public class RectButton extends Button {
 		applet.scale(SCALE);
 		applet.translate(-posX - width/2, -posY - height/2);
 		
-		drawShape();
+		display();
 		
 		applet.popMatrix();
 	}

@@ -11,7 +11,6 @@ public class CircleButton extends Button {
 	
 	protected float diameter;
 	
-			
 	public CircleButton(float posX, float posY, float diameter)
 	{
 		super();
@@ -36,14 +35,7 @@ public class CircleButton extends Button {
 		applet.stroke(128);
 		applet.ellipse(posX, posY, diameter, diameter);
 	}
-	
-	public void drawShape()
-	{
-//		circle();
-		applet.shape(btShape, posX, posY);
-		drawSymbol();
-	}
-	
+		
 	protected void drawSymbol()
 	{
 		if(logo == null) return;
@@ -79,7 +71,7 @@ public class CircleButton extends Button {
 		applet.translate(posX + radius, posY + radius);
 		applet.scale(SCALE);
 		applet.translate(-posX - radius, -posY - radius);
-		drawShape();
+		display();
 		applet.popMatrix();
 	}
 	

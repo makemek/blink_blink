@@ -28,7 +28,6 @@ public abstract class Button extends MouseAdapter
 	private ArrayList<ButtonEvent> observers = new ArrayList<ButtonEvent>();
 	
 	protected PShape btShape;
-	protected abstract void drawShape();
 	public PShape getShape() {return btShape;}
 	
 	public float getPositionX() {return posX;}
@@ -63,11 +62,17 @@ public abstract class Button extends MouseAdapter
 			break;
 
 		default:
-			drawShape();
+			display();
 		}
 		
 	}
 			
+	protected void display()
+	{
+		applet.shape(btShape, posX, posY);
+		drawSymbol();
+	}
+	
 	protected void scaleUp(final float SCALE)
 	{
 		applet.pushMatrix();
@@ -76,7 +81,7 @@ public abstract class Button extends MouseAdapter
 		applet.scale(SCALE);
 		applet.translate(-posX, -posY);
 		
-		drawShape();
+		display();
 		
 		applet.popMatrix();
 	}
