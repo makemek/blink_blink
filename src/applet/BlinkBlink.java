@@ -28,11 +28,12 @@ public class BlinkBlink extends PApplet {
 	private MusicPlayer mPlayer;
 	private WaveForm waveform;
 	
-	private final int BG_COLOR = Color.BLUE.getRGB();
+	private final int BG_COLOR = Color.BLACK.getRGB();
 
 	protected static BlinkBlink instance = null;
 	
-	private PShape shape;
+	private PShape blurBegin;
+	private PShape blurEnd;
 	
 	public static BlinkBlink getInstance()
 	{
@@ -45,8 +46,6 @@ public class BlinkBlink extends PApplet {
 		instance = this;
 		
 		size(800, 600, P3D);
-		
-		shape = Symbol.primitive(PApplet.ELLIPSE, 10, 10);
 
 		final int SPEC_HEIGHT = 300, ANAL_HEIGHT = height >> 3;
 		mPlayer = new MusicPlayer(new Point(10, 10), new Dimension(50, 50));
@@ -58,30 +57,31 @@ public class BlinkBlink extends PApplet {
 		mPlayer.register(analyzer);
 		mPlayer.register(waveform);
 
+		blurBegin = Symbol.primitive(PApplet.RECT, width, (float) (spectrum.dim.getHeight() - 170));
+		blurBegin.setStroke(false);
+		blurBegin.setFill(BG_COLOR);
+		blurEnd = Symbol.primitive(PApplet.RECT, width, height);
+		blurEnd.setStroke(false);
+		final int ALPHA = 80;
+		blurEnd.setFill(BG_COLOR & (ALPHA << 24)); // set alpha to 80
+		
 		smooth();
 		this.frameRate(30);
-		background(BG_COLOR);
 		
 		System.out.println("READY!");
 	}
 
 	public void draw() {
-//		// no blur region
-		this.fill(BG_COLOR);
-		this.noStroke();
-		this.rect(0, 0, width, (float) (spectrum.dim.getHeight() - 170));
-
+		this.shape(blurBegin);
+			
 		waveform.draw();
 		mPlayer.draw();
 		spectrum.draw();
 		analyzer.draw();
-
-//		// blur region
-		this.fill(BG_COLOR, 80);
-		this.noStroke();
-		this.rect(0, (float) (spectrum.dim.getHeight()) - 170, width, height);		
-	}
 		
+		this.shape(blurEnd, 0, (float) (spectrum.dim.getHeight() - 170));
+	}
+
 	public void stop() {
 		System.out.println("EXIT");
 		mPlayer.dispose();
